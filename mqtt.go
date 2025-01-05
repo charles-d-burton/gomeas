@@ -91,6 +91,7 @@ func (mq *MQTT) Start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 	varConn.Password = []byte(mq.Password)
 
 	tryconnect := func() error {
+    slog.Info("trying connect")
 		ctxwt, cancel := context.WithTimeout(ctx, 4*time.Second)
 		defer cancel()
 		return client.Connect(ctxwt, rwc, &varConn)
@@ -128,7 +129,7 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 
 			select {
 			case msg := <-msgs:
-				slog.Debug("received message to publish")
+				slog.Info("received message to publish")
 
 				topic, err := msg.Topic()
 				if err != nil {
@@ -145,6 +146,7 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 					slog.Error(err.Error())
 					continue
 				}
+        slog.Info("publishing message")
 				err = mq.client.PublishPayload(pflags, vpub, data)
 				if err != nil {
 					slog.Error(err.Error())
