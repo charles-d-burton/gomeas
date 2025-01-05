@@ -12,7 +12,6 @@ import (
 )
 
 type MQTT struct {
-	Default  string
 	Username string
 	Password string
 	ClientID string
@@ -28,7 +27,10 @@ func (mq *MQTT) ping(ctx context.Context) {
 			case <-ticker.C:
 				if mq.client.IsConnected() {
 					slog.Info("pinging server")
-					mq.client.StartPing()
+          err := mq.client.StartPing()
+          if err != nil {
+            println(err.Error())
+          }
 				}
 			case <-ctx.Done():
 				return
@@ -62,7 +64,7 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 }
 
 // Start connects to MQTT using the ReadWriteCloser you specifiy.  Likely a tinygo network connection
-func (mq *MQTT) Start(ctx context.Context, rwc io.ReadWriteCloser) (chan []byte, error) {
+func (mq *MQTT) Start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byte, error) {
 	receiver := make(chan []byte, 2)
 	cfg := mqtt.ClientConfig{
 		Decoder: mqtt.DecoderNoAlloc{UserBuffer: make([]byte, 1500)}, OnPub: func(_ mqtt.Header, _ mqtt.VariablesPublish, r io.Reader) error {
@@ -106,7 +108,7 @@ func (mq *MQTT) Start(ctx context.Context, rwc io.ReadWriteCloser) (chan []byte,
 	return receiver, nil
 }
 
-func (mq *MQTT) Publisher(ctx context.Context, msgs chan Message) error {
+func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 	if !mq.client.IsConnected() {
 		time.Sleep(time.Second)
 		return errors.New("client is not connected")
