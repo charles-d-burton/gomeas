@@ -116,6 +116,7 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 	}
 
 	go func() {
+    slog.Info("starting mqtt publisher")
 		pflags, err := mqtt.NewPublishFlags(mqtt.QoS0, false, false)
 		if err != nil {
 			panic(err)
