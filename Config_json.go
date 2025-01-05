@@ -45,30 +45,10 @@ func Config_json_unmarshal_field(iter *jsoniter.Iterator, field string, out *Con
     Device_json_unmarshal(iter, &(*out).Device)
     return true
   case field == `cmps`:
-    Config_map1_json_unmarshal(iter, &(*out).Components)
+    ComponentMap_json_unmarshal(iter, &(*out).Components)
     return true
   }
   return false
-}
-func Config_map1_json_unmarshal (iter *jsoniter.Iterator, out *map[string]Component) {
-  more := iter.ReadObjectHead()
-  if *out == nil && iter.Error == nil {
-    *out = make(map[string]Component)
-  }
-  for more {
-    field := iter.ReadObjectField()
-    var value Component
-    var key string
-    var err error
-    key = field
-    Component_json_unmarshal(iter, &value)
-    if err != nil {
-      iter.ReportError("read map key", err.Error())
-    } else {
-      (*out)[key] = value
-    }
-    more = iter.ReadObjectMore()
-  }
 }
 func Config_json_marshal(stream *jsoniter.Stream, val Config) {
     stream.WriteObjectHead()
@@ -95,15 +75,6 @@ func Config_json_marshal_field(stream *jsoniter.Stream, val Config) {
     Device_json_marshal(stream, val.Device)
     stream.WriteMore()
     stream.WriteObjectField(`cmps`)
-    Config_map2_json_marshal(stream, val.Components)
+    ComponentMap_json_marshal(stream, val.Components)
     stream.WriteMore()
-}
-func Config_map2_json_marshal (stream *jsoniter.Stream, val map[string]Component) {
-  stream.WriteObjectHead()
-  for k, v := range val {
-    stream.WriteObjectField(k)
-    Component_json_marshal(stream, v)
-    stream.WriteMore()
-  }
-  stream.WriteObjectTail()
 }
