@@ -72,7 +72,7 @@ func (config Config) Topic() ([]byte, error) {
 	}
 	elements := strings.Split(config.ConfigTopic, "/")
   println(len(elements))
-	if len(elements) != 4 || len(elements) != 5 {
+	if len(elements) != 4 && len(elements) != 5 {
 		return nil, errors.New("topic must be in the format: <discovery_prefix>/<component>/[<node_id>]/<object_id>/config")
 	}
 	if elements[1] != "device" {
