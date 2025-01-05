@@ -61,12 +61,12 @@ type Component struct {
 	UniqueID          string `json:"unique_id"`
 }
 
-func (config *Config) Marshal() ([]byte, error) {
+func (config Config) Marshal() ([]byte, error) {
 	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Component_json{})
 	return json.Marshal(config)
 }
 
-func (config *Config) Topic() ([]byte, error) {
+func (config Config) Topic() ([]byte, error) {
 	if config.ConfigTopic == "" {
 		return nil, errors.New("must set configuration topic to initialize device discovery")
 	}
