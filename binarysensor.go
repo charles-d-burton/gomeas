@@ -45,14 +45,14 @@ type BinarySensor struct {
 	ValueTemplate          string  `json:"value_template,omitempty"`
 }
 
-func (b *BinarySensor) Topic() ([]byte, error) {
+func (b BinarySensor) Topic() ([]byte, error) {
 	if b.ConfigTopic == "" {
 		return nil, errors.New("ConfigTopic is empty")
 	}
 	return []byte(b.ConfigTopic), nil
 }
 
-func (b *BinarySensor) Marshal() ([]byte, error) {
+func (b BinarySensor) Marshal() ([]byte, error) {
 
 	if len(b.Availability) > 0 && b.AvailabilityTopic != "" {
 		return nil, errors.New("avilability and availability topic are both set")
@@ -79,14 +79,14 @@ type BinarySensorState struct {
 	State       string `json:"state"`
 }
 
-func (bss *BinarySensorState) Topic() ([]byte, error) {
+func (bss BinarySensorState) Topic() ([]byte, error) {
 	if bss.ConfigTopic == "" {
 		return nil, errors.New("ConfigTopic is empty")
 	}
 	return []byte(bss.ConfigTopic), nil
 }
 
-func (bss *BinarySensorState) Marshal() ([]byte, error) {
+func (bss BinarySensorState) Marshal() ([]byte, error) {
 	switch bss.State {
 	case "ON", "OFF":
 		json := jsoniter.CreateJsonAdapter(BinarySensorState_json{})

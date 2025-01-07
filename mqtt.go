@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"io"
-	"log/slog"
 	"math/rand/v2"
 	"time"
 
@@ -26,14 +25,14 @@ type Options struct {
 
 // ping pings the server every 30 seconds to maintain connection
 func (mq *MQTT) ping(ctx context.Context) {
-  slog.Info("starting background ping service")
+  println("info:starting background ping service")
 	ticker := time.NewTicker(30 * time.Second)
 	go func() {
 		for {
 			select {
 			case <-ticker.C:
 				if mq.client.IsConnected() {
-					slog.Info("pinging server")
+					println("pinging server")
           err := mq.client.StartPing()
           if err != nil {
             println(err.Error())
@@ -53,18 +52,18 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 			if !mq.client.IsConnected() {
 				time.Sleep(time.Second)
         if err := tcon(); err != nil {
-          slog.Info(err.Error())
+          println(err.Error())
           continue
         }
-				slog.Info("reconnected to mqtt broker")
+        println("info:reconnected to mqtt broker")
 				continue
 			}
 			select {
 			case <-ctx.Done():
-				slog.Info("received done signal, exiting handler")
+        println("info:received done signal, exiting handler")
 				return
 			default:
-        slog.Info("handling inbound requests")
+        println("info:handling inbound request")
 				err := mq.client.HandleNext()
 				if err != nil {
 					mq.client.Disconnect(err)
@@ -108,7 +107,7 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 					//Ignores message if buffer full
 				}
 			}
-			println("received message")
+      println("info:received message")
 			return nil
 		},
 	}
@@ -119,10 +118,10 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 	varConn.SetDefaultMQTT([]byte(mq.ClientID))
 	varConn.Username = []byte(mq.Username)
 	varConn.Password = []byte(mq.Password)
-  slog.Info("connecting with username: ", slog.String("user", mq.Username))
+  println("info:connecting with username: " + mq.Username)
 
 	tryconnect := func() error {
-    slog.Info("trying connect")
+    println("info:trying connect")
 		ctxwt, cancel := context.WithTimeout(ctx, 4*time.Second)
     defer cancel()
     // return client.StartConnect(rwc, &varConn)
@@ -131,13 +130,12 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 
 	err := tryconnect()
 	if err != nil {
-		slog.Error("connect attempt failed")
-		panic(err)
+    println("error:connect attempt failed")
+    return nil, err
 	}
-	slog.Info("connected to mqtt broker")
+  println("info:connected to mqtt broker")
 	mq.ping(ctx)
 	mq.handle(ctx, tryconnect)
-  slog.Info("background processes started")
 
 	return receiver, nil
 }
@@ -149,28 +147,28 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 	}
 
 	go func() {
-    slog.Info("starting mqtt publisher")
+    println("info:starting mqtt publisher")
 		pflags, err := mqtt.NewPublishFlags(mqtt.QoS0, false, false)
 		if err != nil {
 			panic(err)
 		}
 		for {
 			if !mq.client.IsConnected() {
-				slog.Info("client is disconnected, sleeping for 1 second and retrying")
+        println("error:client is disconnected, sleeping for 1 second and retrying")
 				time.Sleep(time.Second)
 				continue
 			}
 
 			select {
 			case msg := <-msgs:
-        slog.Info("received message to publish")
+        println("info:received message to publish")
 
 				topic, err := msg.Topic()
 				if err != nil {
-					slog.Error(err.Error())
+					println(err.Error())
 					continue
 				}
-        slog.Info("on topic" + string(topic))
+        println("info:topic:" + string(topic))
 
 				vpub := mqtt.VariablesPublish{
 					TopicName:        topic,
@@ -178,18 +176,17 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 				}
 				data, err := msg.Marshal()
 				if err != nil {
-					slog.Error(err.Error())
+					println(err.Error())
 					continue
 				}
-        slog.Info(string(data))
-        slog.Info("publishing message")
+        println("info:publishing message")
 				err = mq.client.PublishPayload(pflags, vpub, data)
 				if err != nil {
-					slog.Error(err.Error())
+          println("error:" +err.Error())
 				}
 				time.Sleep(time.Second)
 			case <-ctx.Done():
-				slog.Info("received done signal, exiting")
+        println("info:received done signal, exiting")
 				return
 			}
 		}
