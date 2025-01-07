@@ -15,7 +15,6 @@ type MQTT struct {
 	Username string
 	Password string
 	ClientID string
-  DiscoveryTopic string
 	client   *mqtt.Client
 }
 
@@ -23,7 +22,6 @@ type Options struct {
   Username string
   Password string
   ClientID string
-  DiscoveryTopic string
 }
 
 // ping pings the server every 30 seconds to maintain connection
@@ -54,7 +52,10 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 		for {
 			if !mq.client.IsConnected() {
 				time.Sleep(time.Second)
-				tcon()
+        if err := tcon(); err != nil {
+          slog.Info(err.Error())
+          continue
+        }
 				slog.Info("reconnected to mqtt broker")
 				continue
 			}
@@ -79,9 +80,6 @@ func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Opt
     options.ClientID = randSeq(8)
   }
   
-  if options.DiscoveryTopic == "" {
-    options.DiscoveryTopic = "homeassistant"
-  }
   mq := &MQTT{
     Username: options.Username,
     Password: options.Password,
