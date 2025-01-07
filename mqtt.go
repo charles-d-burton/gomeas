@@ -28,6 +28,7 @@ type Options struct {
 
 // ping pings the server every 30 seconds to maintain connection
 func (mq *MQTT) ping(ctx context.Context) {
+  slog.Info("starting background ping service")
 	ticker := time.NewTicker(30 * time.Second)
 	go func() {
 		for {
@@ -62,6 +63,7 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 				slog.Info("received done signal, exiting handler")
 				return
 			default:
+        slog.Info("handling inbound requests")
 				err := mq.client.HandleNext()
 				if err != nil {
 					mq.client.Disconnect(err)
@@ -137,6 +139,7 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 	slog.Info("connected to mqtt broker")
 	mq.ping(ctx)
 	mq.handle(ctx, tryconnect)
+  slog.Info("background processes started")
 
 	return receiver, nil
 }
