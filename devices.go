@@ -2,9 +2,8 @@ package gomeas
 
 import (
 	"errors"
-	"github.com/goccy/go-json"
 	"strings"
-	// jsoniter "github.com/json-iterator/tinygo"
+	jsoniter "github.com/json-iterator/tinygo"
 )
 
 type Message interface {
@@ -54,16 +53,16 @@ const (
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Component struct {
-	P                 *string `json:"p"`
-	DeviceClass       *string `json:"device_class"`
-	UnitOfMeasurement *string `json:"unit_of_measurement"`
-	ValueTemplate     *string `json:"value_template"`
-	UniqueID          *string `json:"unique_id"`
+	P                 string `json:"p"`
+	DeviceClass       string `json:"device_class"`
+	UnitOfMeasurement string `json:"unit_of_measurement"`
+	ValueTemplate     string `json:"value_template"`
+	UniqueID          string `json:"unique_id"`
 }
 
 func (config Config) Marshal() ([]byte, error) {
-	// json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Component_json{})
-	return json.Marshal(config)
+	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Component_json{})
+  return json.Marshal(&config)
 }
 
 func (config Config) Topic() ([]byte, error) {
