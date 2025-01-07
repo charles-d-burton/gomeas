@@ -16,35 +16,35 @@ type DeviceConfig interface {
 	GetConfig() ([]byte, error)
 }
 
-//go:generate go run github.com/json-iterator/tinygo/gen
-type ComponentMap = map[string]Component
+// //go:generate go run github.com/json-iterator/tinygo/gen
+// type ComponentMap = map[string]Component
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Config struct {
 	ConfigTopic   string       `json:"-"`
 	Name          string       `json:"name"`
 	DeviceClass   string       `json:"device_class"`
-	StateTopic    string       `json:"stat_t,omitempty"`
-	ComamandTopic string       `json:"cmd_t,omitempty"`
+	StateTopic    *string       `json:"stat_t,omitempty"`
+	ComamandTopic *string       `json:"cmd_t,omitempty"`
 	UniqueID      string       `json:"unique_id"`
-	Device        Device       `json:"dev,omitempty"`
-	Components    ComponentMap `json:"cmps,omitempty"`
+	Device        *Device       `json:"dev,omitempty"`
+	Components    map[string]*Component `json:"cmps,omitempty"`
 }
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Device struct {
-	ConfigurationURL string   `json:"cu,omitempty"`
+	ConfigurationURL *string   `json:"cu,omitempty"`
 	Connections      []string `json:"cns,omitempty"`
-	HardwareVersion  string   `json:"hw,omitempty"`
+	HardwareVersion  *string   `json:"hw,omitempty"`
 	Identifiers      []string `json:"ids,omitempty"`
-	Manufacturer     string   `json:"mf,omitempty"`
-	Model            string   `json:"mdl,omitempty"`
-	ModelID          string   `json:"mdl_id,omitempty"`
-	Name             string   `json:"name,omitempty"`
-	SerialNumber     string   `json:"sn,omitempty"`
-	SuggestedArea    string   `json:"sa,omitempty"`
-	SoftwareVersion  string   `json:"sw,omitempty"`
-	ViaDevice        string   `json:"via_device,omitempty"`
+	Manufacturer     *string   `json:"mf,omitempty"`
+	Model            *string   `json:"mdl,omitempty"`
+	ModelID          *string   `json:"mdl_id,omitempty"`
+	Name             *string   `json:"name,omitempty"`
+	SerialNumber     *string   `json:"sn,omitempty"`
+	SuggestedArea    *string   `json:"sa,omitempty"`
+	SoftwareVersion  *string   `json:"sw,omitempty"`
+	ViaDevice        *string   `json:"via_device,omitempty"`
 }
 
 const (
@@ -54,11 +54,11 @@ const (
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Component struct {
-	P                 string `json:"p"`
-	DeviceClass       string `json:"device_class"`
-	UnitOfMeasurement string `json:"unit_of_measurement"`
-	ValueTemplate     string `json:"value_template"`
-	UniqueID          string `json:"unique_id"`
+	P                 *string `json:"p"`
+	DeviceClass       *string `json:"device_class"`
+	UnitOfMeasurement *string `json:"unit_of_measurement"`
+	ValueTemplate     *string `json:"value_template"`
+	UniqueID          *string `json:"unique_id"`
 }
 
 func (config Config) Marshal() ([]byte, error) {

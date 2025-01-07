@@ -1,6 +1,4 @@
 github.com/goccy/go-json v0.10.4 h1:JSwxQzIqKfmFX1swYPpUThQZp/Ka4wzJdK0LWVytLPM=
 github.com/goccy/go-json v0.10.4/go.mod h1:oq7eo15ShAhp70Anwd5lgX2pLfOS3QCiwU/PULtXL6M=
-github.com/json-iterator/tinygo v0.0.0-20211221071957-84b5b690c8a0 h1:/cd98gHSKnKHcYYyBJ9qNvHxYZdXzJC8JMs42gMPp5I=
-github.com/json-iterator/tinygo v0.0.0-20211221071957-84b5b690c8a0/go.mod h1:sR5SXbtbtp8PxPu3yGjZug4AS5aAur8jQZl9DXYTpP0=
 github.com/soypat/natiu-mqtt v0.5.1 h1:rwaDmlvjzD2+3MCOjMZc4QEkDkNwDzbct2TJbpz+TPc=
 github.com/soypat/natiu-mqtt v0.5.1/go.mod h1:xEta+cwop9izVCW7xOx2W+ct9PRMqr0gNVkvBPnQTc4=
