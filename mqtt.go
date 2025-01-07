@@ -163,13 +163,14 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 
 			select {
 			case msg := <-msgs:
-				slog.Info("received message to publish")
+        slog.Info("received message to publish")
 
 				topic, err := msg.Topic()
 				if err != nil {
 					slog.Error(err.Error())
 					continue
 				}
+        slog.Info("on topic" + string(topic))
 
 				vpub := mqtt.VariablesPublish{
 					TopicName:        topic,
@@ -180,6 +181,7 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 					slog.Error(err.Error())
 					continue
 				}
+        slog.Info(string(data))
         slog.Info("publishing message")
 				err = mq.client.PublishPayload(pflags, vpub, data)
 				if err != nil {
