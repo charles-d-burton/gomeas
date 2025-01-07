@@ -71,6 +71,7 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 	}()
 }
 
+//TODO: Handle the dependency injection better
 func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (<-chan []byte, error) {
   if options.ClientID == "" {
     options.ClientID = randSeq(8)
@@ -81,6 +82,8 @@ func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Opt
   }
   mq := &MQTT{
     Username: options.Username,
+    Password: options.Password,
+    ClientID: options.ClientID,
   }
 
   return mq.start(ctx, rwc)
