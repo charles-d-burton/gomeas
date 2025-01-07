@@ -16,7 +16,7 @@ type DeviceConfig interface {
 }
 
 //go:generate go run github.com/json-iterator/tinygo/gen
-type ComponentMap = map[string]*Component
+type Components = map[string]Component
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Config struct {
@@ -27,7 +27,7 @@ type Config struct {
 	ComamandTopic *string       `json:"cmd_t,omitempty"`
 	UniqueID      string       `json:"unique_id"`
 	Device        *Device       `json:"dev,omitempty"`
-	Components    *ComponentMap `json:"cmps,omitempty"`
+	Components    Components `json:"cmps,omitempty"`
 }
 
 //go:generate go run github.com/json-iterator/tinygo/gen
@@ -61,7 +61,7 @@ type Component struct {
 }
 
 func (config Config) Marshal() ([]byte, error) {
-	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Component_json{})
+	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Components_json{}, Component_json{})
   return json.Marshal(&config)
 }
 
