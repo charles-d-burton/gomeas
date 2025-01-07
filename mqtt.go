@@ -123,9 +123,10 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 
 	tryconnect := func() error {
     slog.Info("trying connect")
-		// ctxwt, cancel := context.WithTimeout(ctx, 4*time.Second)
-    return client.StartConnect(rwc, &varConn)
-		// return client.Connect(ctxwt, rwc, &varConn)
+		ctxwt, cancel := context.WithTimeout(ctx, 4*time.Second)
+    defer cancel()
+    // return client.StartConnect(rwc, &varConn)
+		return client.Connect(ctxwt, rwc, &varConn)
 	}
 
 	err := tryconnect()
