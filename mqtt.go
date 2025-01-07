@@ -72,7 +72,7 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 }
 
 //TODO: Handle the dependency injection better
-func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (<-chan []byte, error) {
+func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (*MQTT, <-chan []byte, error) {
   if options.ClientID == "" {
     options.ClientID = randSeq(8)
   }
@@ -86,7 +86,11 @@ func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Opt
     ClientID: options.ClientID,
   }
 
-  return mq.start(ctx, rwc)
+  data, err := mq.start(ctx, rwc)
+  if err != nil {
+    return nil, nil, err
+  }
+  return mq, data, nil
 }
 
 // Start connects to MQTT using the ReadWriteCloser you specifiy.  Likely a tinygo network connection
