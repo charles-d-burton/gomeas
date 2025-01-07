@@ -119,13 +119,13 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 	varConn.SetDefaultMQTT([]byte(mq.ClientID))
 	varConn.Username = []byte(mq.Username)
 	varConn.Password = []byte(mq.Password)
-  slog.Info("using parameters: ", &varConn)
+  slog.Info("connecting with username: ", slog.String("user", mq.Username))
 
 	tryconnect := func() error {
     slog.Info("trying connect")
-		ctxwt, cancel := context.WithTimeout(ctx, 4*time.Second)
-		defer cancel()
-		return client.Connect(ctxwt, rwc, &varConn)
+		// ctxwt, cancel := context.WithTimeout(ctx, 4*time.Second)
+    return client.StartConnect(rwc, &varConn)
+		// return client.Connect(ctxwt, rwc, &varConn)
 	}
 
 	err := tryconnect()
