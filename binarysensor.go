@@ -2,8 +2,7 @@ package gomeas
 
 import (
 	"errors"
-
-	jsoniter "github.com/json-iterator/tinygo"
+	"github.com/goccy/go-json"
 )
 
 // homeassistant.com/integrations/binary_sensor.mqtt/
@@ -68,8 +67,6 @@ func (b BinarySensor) Marshal() ([]byte, error) {
 	if b.StateTopic == "" {
 		return nil, errors.New("state topic is empty")
 	}
-
-	json := jsoniter.CreateJsonAdapter(BinarySensor_json{}, Device_json{})
 	return json.Marshal(b)
 }
 
@@ -89,7 +86,6 @@ func (bss BinarySensorState) Topic() ([]byte, error) {
 func (bss BinarySensorState) Marshal() ([]byte, error) {
 	switch bss.State {
 	case "ON", "OFF":
-		json := jsoniter.CreateJsonAdapter(BinarySensorState_json{})
 		return json.Marshal(bss)
 	default:
 		return nil, errors.New("state is not ON or OFF")

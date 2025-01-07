@@ -18,14 +18,14 @@ type MQTT struct {
 }
 
 type Options struct {
-  Username string
-  Password string
-  ClientID string
+	Username string
+	Password string
+	ClientID string
 }
 
 // ping pings the server every 30 seconds to maintain connection
 func (mq *MQTT) ping(ctx context.Context) {
-  println("info:starting background ping service")
+	println("info:starting background ping service")
 	ticker := time.NewTicker(30 * time.Second)
 	go func() {
 		for {
@@ -33,10 +33,10 @@ func (mq *MQTT) ping(ctx context.Context) {
 			case <-ticker.C:
 				if mq.client.IsConnected() {
 					println("pinging server")
-          err := mq.client.StartPing()
-          if err != nil {
-            println(err.Error())
-          }
+					err := mq.client.StartPing()
+					if err != nil {
+						println(err.Error())
+					}
 				}
 			case <-ctx.Done():
 				return
@@ -51,19 +51,19 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 		for {
 			if !mq.client.IsConnected() {
 				time.Sleep(time.Second)
-        if err := tcon(); err != nil {
-          println(err.Error())
-          continue
-        }
-        println("info:reconnected to mqtt broker")
+				if err := tcon(); err != nil {
+					println(err.Error())
+					continue
+				}
+				println("info:reconnected to mqtt broker")
 				continue
 			}
 			select {
 			case <-ctx.Done():
-        println("info:received done signal, exiting handler")
+				println("info:received done signal, exiting handler")
 				return
 			default:
-        println("info:handling inbound request")
+				println("info:handling inbound request")
 				err := mq.client.HandleNext()
 				if err != nil {
 					mq.client.Disconnect(err)
@@ -73,23 +73,23 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 	}()
 }
 
-//TODO: Handle the dependency injection better
+// TODO: Handle the dependency injection better
 func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (*MQTT, <-chan []byte, error) {
-  if options.ClientID == "" {
-    options.ClientID = randSeq(8)
-  }
-  
-  mq := &MQTT{
-    Username: options.Username,
-    Password: options.Password,
-    ClientID: options.ClientID,
-  }
+	if options.ClientID == "" {
+		options.ClientID = randSeq(8)
+	}
 
-  data, err := mq.start(ctx, rwc)
-  if err != nil {
-    return nil, nil, err
-  }
-  return mq, data, nil
+	mq := &MQTT{
+		Username: options.Username,
+		Password: options.Password,
+		ClientID: options.ClientID,
+	}
+
+	data, err := mq.start(ctx, rwc)
+	if err != nil {
+		return nil, nil, err
+	}
+	return mq, data, nil
 }
 
 // Start connects to MQTT using the ReadWriteCloser you specifiy.  Likely a tinygo network connection
@@ -107,7 +107,7 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 					//Ignores message if buffer full
 				}
 			}
-      println("info:received message")
+			println("info:received message")
 			return nil
 		},
 	}
@@ -118,22 +118,22 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 	varConn.SetDefaultMQTT([]byte(mq.ClientID))
 	varConn.Username = []byte(mq.Username)
 	varConn.Password = []byte(mq.Password)
-  println("info:connecting with username: " + mq.Username)
+	println("info:connecting with username: " + mq.Username)
 
 	tryconnect := func() error {
-    println("info:trying connect")
+		println("info:trying connect")
 		ctxwt, cancel := context.WithTimeout(ctx, 4*time.Second)
-    defer cancel()
-    // return client.StartConnect(rwc, &varConn)
+		defer cancel()
+		// return client.StartConnect(rwc, &varConn)
 		return client.Connect(ctxwt, rwc, &varConn)
 	}
 
 	err := tryconnect()
 	if err != nil {
-    println("error:connect attempt failed")
-    return nil, err
+		println("error:connect attempt failed")
+		return nil, err
 	}
-  println("info:connected to mqtt broker")
+	println("info:connected to mqtt broker")
 	mq.ping(ctx)
 	mq.handle(ctx, tryconnect)
 
@@ -147,28 +147,28 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 	}
 
 	go func() {
-    println("info:starting mqtt publisher")
+		println("info:starting mqtt publisher")
 		pflags, err := mqtt.NewPublishFlags(mqtt.QoS0, false, false)
 		if err != nil {
 			panic(err)
 		}
 		for {
 			if !mq.client.IsConnected() {
-        println("error:client is disconnected, sleeping for 1 second and retrying")
+				println("error:client is disconnected, sleeping for 1 second and retrying")
 				time.Sleep(time.Second)
 				continue
 			}
 
 			select {
 			case msg := <-msgs:
-        println("info:received message to publish")
+				println("info:received message to publish")
 
 				topic, err := msg.Topic()
 				if err != nil {
 					println(err.Error())
 					continue
 				}
-        println("info:topic:" + string(topic))
+				println("info:topic:" + string(topic))
 
 				vpub := mqtt.VariablesPublish{
 					TopicName:        topic,
@@ -179,14 +179,14 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 					println(err.Error())
 					continue
 				}
-        println("info:publishing message")
+				println("info:publishing message")
 				err = mq.client.PublishPayload(pflags, vpub, data)
 				if err != nil {
-          println("error:" +err.Error())
+					println("error:" + err.Error())
 				}
 				time.Sleep(time.Second)
 			case <-ctx.Done():
-        println("info:received done signal, exiting")
+				println("info:received done signal, exiting")
 				return
 			}
 		}
@@ -198,11 +198,11 @@ func (mq *MQTT) Subscribe(ctx context.Context, topic string) error {
 	var vsub mqtt.VariablesSubscribe
 	vsub.TopicFilters = []mqtt.SubscribeRequest{{TopicFilter: []byte(topic), QoS: mqtt.QoS0}}
 	vsub.PacketIdentifier = randInt16()
-  err := mq.client.Subscribe(ctx, vsub)
+	err := mq.client.Subscribe(ctx, vsub)
 	if err != nil {
-    return err
+		return err
 	}
-  return nil
+	return nil
 }
 
 func randInt16() uint16 {
@@ -215,9 +215,9 @@ func randInt16() uint16 {
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
 func randSeq(n int) string {
-    b := make([]rune, n)
-    for i := range b {
-        b[i] = letters[rand.IntN(len(letters))]
-    }
-    return string(b)
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.IntN(len(letters))]
+	}
+	return string(b)
 }

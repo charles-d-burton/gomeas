@@ -2,9 +2,9 @@ package gomeas
 
 import (
 	"errors"
+	"github.com/goccy/go-json"
 	"strings"
-
-	jsoniter "github.com/json-iterator/tinygo"
+	// jsoniter "github.com/json-iterator/tinygo"
 )
 
 type Message interface {
@@ -21,13 +21,13 @@ type ComponentMap = map[string]Component
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Config struct {
-	ConfigTopic   string               `json:"-"`
-	Name          string               `json:"name"`
-	DeviceClass   string               `json:"device_class"`
-	StateTopic    string               `json:"stat_t,omitempty"`
-	ComamandTopic string               `json:"cmd_t,omitempty"`
-	UniqueID      string               `json:"unique_id"`
-	Device        Device               `json:"dev,omitempty"`
+	ConfigTopic   string       `json:"-"`
+	Name          string       `json:"name"`
+	DeviceClass   string       `json:"device_class"`
+	StateTopic    string       `json:"stat_t,omitempty"`
+	ComamandTopic string       `json:"cmd_t,omitempty"`
+	UniqueID      string       `json:"unique_id"`
+	Device        Device       `json:"dev,omitempty"`
 	Components    ComponentMap `json:"cmps,omitempty"`
 }
 
@@ -62,7 +62,7 @@ type Component struct {
 }
 
 func (config Config) Marshal() ([]byte, error) {
-	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Component_json{})
+	// json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Component_json{})
 	return json.Marshal(config)
 }
 
@@ -71,7 +71,7 @@ func (config Config) Topic() ([]byte, error) {
 		return nil, errors.New("must set configuration topic to initialize device discovery")
 	}
 	elements := strings.Split(config.ConfigTopic, "/")
-  println(len(elements))
+	println(len(elements))
 	if len(elements) != 4 && len(elements) != 5 {
 		return nil, errors.New("topic must be in the format: <discovery_prefix>/<component>/[<node_id>]/<object_id>/config")
 	}
@@ -83,4 +83,3 @@ func (config Config) Topic() ([]byte, error) {
 	}
 	return []byte(config.ConfigTopic), nil
 }
-
