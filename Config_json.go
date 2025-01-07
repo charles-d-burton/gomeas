@@ -45,7 +45,7 @@ func Config_json_unmarshal_field(iter *jsoniter.Iterator, field string, out *Con
     Config_ptr3_json_unmarshal(iter, &(*out).Device)
     return true
   case field == `cmps`:
-    Config_map4_json_unmarshal(iter, &(*out).Components)
+    Config_ptr4_json_unmarshal(iter, &(*out).Components)
     return true
   }
   return false
@@ -71,32 +71,12 @@ func Config_ptr3_json_unmarshal (iter *jsoniter.Iterator, out **Device) {
       *out = &val
     }
 }
-func Config_ptr5_json_unmarshal (iter *jsoniter.Iterator, out **Component) {
-    var val Component
-    Component_json_unmarshal(iter, &val)
+func Config_ptr4_json_unmarshal (iter *jsoniter.Iterator, out **ComponentMap) {
+    var val ComponentMap
+    ComponentMap_json_unmarshal(iter, &val)
     if iter.Error == nil {
       *out = &val
     }
-}
-func Config_map4_json_unmarshal (iter *jsoniter.Iterator, out *map[string]*Component) {
-  more := iter.ReadObjectHead()
-  if *out == nil && iter.Error == nil {
-    *out = make(map[string]*Component)
-  }
-  for more {
-    field := iter.ReadObjectField()
-    var value *Component
-    var key string
-    var err error
-    key = field
-    Config_ptr5_json_unmarshal(iter, &value)
-    if err != nil {
-      iter.ReportError("read map key", err.Error())
-    } else {
-      (*out)[key] = value
-    }
-    more = iter.ReadObjectMore()
-  }
 }
 func Config_json_marshal(stream *jsoniter.Stream, val Config) {
     stream.WriteObjectHead()
@@ -135,19 +115,10 @@ func Config_json_marshal_field(stream *jsoniter.Stream, val Config) {
     }
     stream.WriteMore()
     stream.WriteObjectField(`cmps`)
-    Config_map6_json_marshal(stream, val.Components)
-    stream.WriteMore()
-}
-func Config_map6_json_marshal (stream *jsoniter.Stream, val map[string]*Component) {
-  stream.WriteObjectHead()
-  for k, v := range val {
-    stream.WriteObjectField(k)
-    if v == nil {
+    if val.Components == nil {
        stream.WriteNull()
     } else {
-    Component_json_marshal(stream, *v)
+    ComponentMap_json_marshal(stream, *val.Components)
     }
     stream.WriteMore()
-  }
-  stream.WriteObjectTail()
 }
