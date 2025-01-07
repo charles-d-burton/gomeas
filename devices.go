@@ -62,7 +62,7 @@ type Component struct {
 
 func (config Config) Marshal() ([]byte, error) {
 	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Components_json{}, Component_json{})
-  return json.Marshal(&config)
+  return json.Marshal(config)
 }
 
 func (config Config) Topic() ([]byte, error) {
