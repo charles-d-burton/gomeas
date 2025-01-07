@@ -15,7 +15,15 @@ type MQTT struct {
 	Username string
 	Password string
 	ClientID string
+  DiscoveryTopic string
 	client   *mqtt.Client
+}
+
+type Options struct {
+  Username string
+  Password string
+  ClientID string
+  DiscoveryTopic string
 }
 
 // ping pings the server every 30 seconds to maintain connection
@@ -63,8 +71,23 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 	}()
 }
 
+func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (<-chan []byte, error) {
+  if options.ClientID == "" {
+    options.ClientID = randSeq(8)
+  }
+  
+  if options.DiscoveryTopic == "" {
+    options.DiscoveryTopic = "homeassistant"
+  }
+  mq := &MQTT{
+    Username: options.Username,
+  }
+
+  return mq.start(ctx, rwc)
+}
+
 // Start connects to MQTT using the ReadWriteCloser you specifiy.  Likely a tinygo network connection
-func (mq *MQTT) Start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byte, error) {
+func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byte, error) {
 	receiver := make(chan []byte, 2)
 	cfg := mqtt.ClientConfig{
 		Decoder: mqtt.DecoderNoAlloc{UserBuffer: make([]byte, 1500)}, OnPub: func(_ mqtt.Header, _ mqtt.VariablesPublish, r io.Reader) error {
@@ -159,15 +182,18 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 			}
 		}
 	}()
-	// var vsub mqtt.VariablesSubscribe
-	// vsub.TopicFilters = []mqtt.SubscribeRequest{mqtt.SubscribeRequest{TopicFilter: []byte("homeassistant/binary_sensor/meeting/state"), QoS: mqtt.QoS0}}
-	// vsub.PacketIdentifier = randInt16()
-	// err = client.Subscribe(ctx, vsub)
-	// if err != nil {
-	// 	println(err.Error())
-	// 	panic(err)
-	// }
 	return nil
+}
+
+func (mq *MQTT) Subscribe(ctx context.Context, topic string) error {
+	var vsub mqtt.VariablesSubscribe
+	vsub.TopicFilters = []mqtt.SubscribeRequest{{TopicFilter: []byte(topic), QoS: mqtt.QoS0}}
+	vsub.PacketIdentifier = randInt16()
+  err := mq.client.Subscribe(ctx, vsub)
+	if err != nil {
+    return err
+	}
+  return nil
 }
 
 func randInt16() uint16 {
@@ -175,4 +201,14 @@ func randInt16() uint16 {
 	a %= (65535 - 1)
 	a += 1
 	return uint16(a)
+}
+
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+func randSeq(n int) string {
+    b := make([]rune, n)
+    for i := range b {
+        b[i] = letters[rand.IntN(len(letters))]
+    }
+    return string(b)
 }

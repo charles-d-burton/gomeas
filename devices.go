@@ -84,25 +84,3 @@ func (config Config) Topic() ([]byte, error) {
 	return []byte(config.ConfigTopic), nil
 }
 
-// type MeetingConfig struct {
-// 	Name        string `json:"name"`
-// 	DeviceClass string `json:"device_class"`
-// 	StateTopic  string `json:"state_topic"`
-// 	UniqueID    string `json:"unique_id"`
-// 	Device      Device `json:"device"`
-// }
-
-// // TODO: Make these modifiable
-// func (mc *MeetingConfig) GetConfig() ([]byte, error) {
-// 	mc.Name = "meeting"
-// 	mc.DeviceClass = "presence"
-// 	mc.StateTopic = "homeassistant/binary_sensor/meeting/state"
-// 	mc.UniqueID = "meeting01ad"
-// 	mc.Device = Device{
-// 		Name:         "meeting",
-// 		Identifiers:  []string{"01ad", "meeting_detector"},
-// 		Model:        "meeting_detector",
-// 		Manufacturer: "charles-d-burton",
-// 	}
-// 	return json.Marshal(mc)
-// }
