@@ -20,7 +20,7 @@ func (sensor Sensor) Marshal() ([]byte, error) {
   if sensor.Name == "" {
     return nil, errors.New("sensor:name-undefined")
   }
-	json := jsoniter.CreateJsonAdapter(Sensor_json{}, Device_json{}, Components_json{}, Component_json{}, Availabilities_json{})
+	json := jsoniter.CreateJsonAdapter(Sensor_json{}, Device_json{}, Components_json{}, Component_json{},)
   return json.Marshal(sensor)
 }
 
