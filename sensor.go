@@ -35,15 +35,7 @@ func (sensor Sensor) Topic() ([]byte, error) {
 	if elements[len(elements)-1] != "config" {
 		return nil, errors.New(`last field of the topic must be the word "config"`)
 	}
-  
-  if sensor.Platform == "" {
-    return nil, errors.New("sensor:field platform must be set")
-  }
-
-  if sensor.Platform != "sensor" {
-    return nil, errors.New("sensor:field platform must be set to sensor")
-  }
-
+  sensor.Platform = "sensor"
   if elements[1] != "sensor" {
     return nil, errors.New(`second field of topic must be the word "sensor"`)
   }
