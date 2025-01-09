@@ -21,7 +21,7 @@ type Components = map[string]Component
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Config struct {
 	ConfigTopic   string       `json:"-"`
-	Availability Availabilities `json:"availability,omitempty"`
+	Availability []Availability `json:"availability,omitempty"`
 	AvailibilityMode       string  `json:"availibility_mode,omitempty"`
 	AvailabilityTemplate   string  `json:"availability_template,omitempty"`
 	AvailabilityTopic      string  `json:"availability_topic,omitempty"`
@@ -50,9 +50,6 @@ type Device struct {
 	SoftwareVersion  *string   `json:"software_version,omitempty"`
 	ViaDevice        *string   `json:"via_device,omitempty"`
 }
-
-//go:generate go run github.com/json-iterator/tinygo/gen
-type Availabilities []*Availability
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Availability struct {

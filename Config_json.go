@@ -27,7 +27,7 @@ func Config_json_unmarshal(iter *jsoniter.Iterator, out *Config) {
 func Config_json_unmarshal_field(iter *jsoniter.Iterator, field string, out *Config) bool {
   switch {
   case field == `availability`:
-    Availabilities_json_unmarshal(iter, &(*out).Availability)
+    Config_array1_json_unmarshal(iter, &(*out).Availability)
     return true
   case field == `availibility_mode`:
     iter.ReadString(&(*out).AvailibilityMode)
@@ -45,16 +45,16 @@ func Config_json_unmarshal_field(iter *jsoniter.Iterator, field string, out *Con
     iter.ReadString(&(*out).DeviceClass)
     return true
   case field == `state_topic`:
-    Config_ptr1_json_unmarshal(iter, &(*out).StateTopic)
+    Config_ptr2_json_unmarshal(iter, &(*out).StateTopic)
     return true
   case field == `command_topic`:
-    Config_ptr2_json_unmarshal(iter, &(*out).ComamandTopic)
+    Config_ptr3_json_unmarshal(iter, &(*out).ComamandTopic)
     return true
   case field == `unique_id`:
     iter.ReadString(&(*out).UniqueID)
     return true
   case field == `device`:
-    Config_ptr3_json_unmarshal(iter, &(*out).Device)
+    Config_ptr4_json_unmarshal(iter, &(*out).Device)
     return true
   case field == `components`:
     Components_json_unmarshal(iter, &(*out).Components)
@@ -65,12 +65,23 @@ func Config_json_unmarshal_field(iter *jsoniter.Iterator, field string, out *Con
   }
   return false
 }
-func Config_ptr1_json_unmarshal (iter *jsoniter.Iterator, out **string) {
-    var val string
-    iter.ReadString(&val)
-    if iter.Error == nil {
-      *out = &val
+func Config_array1_json_unmarshal (iter *jsoniter.Iterator, out *[]Availability) {
+  i := 0
+  val := *out
+  more := iter.ReadArrayHead()
+  for more {
+    if i == len(val) {
+      val = append(val, make([]Availability, 4)...)
     }
+    Availability_json_unmarshal(iter, &val[i])
+    i++
+    more = iter.ReadArrayMore()
+  }
+  if i == 0 {
+    *out = []Availability{}
+  } else {
+    *out = val[:i]
+  }
 }
 func Config_ptr2_json_unmarshal (iter *jsoniter.Iterator, out **string) {
     var val string
@@ -79,7 +90,14 @@ func Config_ptr2_json_unmarshal (iter *jsoniter.Iterator, out **string) {
       *out = &val
     }
 }
-func Config_ptr3_json_unmarshal (iter *jsoniter.Iterator, out **Device) {
+func Config_ptr3_json_unmarshal (iter *jsoniter.Iterator, out **string) {
+    var val string
+    iter.ReadString(&val)
+    if iter.Error == nil {
+      *out = &val
+    }
+}
+func Config_ptr4_json_unmarshal (iter *jsoniter.Iterator, out **Device) {
     var val Device
     Device_json_unmarshal(iter, &val)
     if iter.Error == nil {
@@ -93,7 +111,7 @@ func Config_json_marshal(stream *jsoniter.Stream, val Config) {
 }
 func Config_json_marshal_field(stream *jsoniter.Stream, val Config) {
     stream.WriteObjectField(`availability`)
-    Availabilities_json_marshal(stream, val.Availability)
+    Config_array5_json_marshal(stream, val.Availability)
     stream.WriteMore()
     stream.WriteObjectField(`availibility_mode`)
     stream.WriteString(val.AvailibilityMode)
@@ -140,4 +158,16 @@ func Config_json_marshal_field(stream *jsoniter.Stream, val Config) {
     stream.WriteObjectField(`enabled_by_default`)
     stream.WriteBool(val.EnabledByDefault)
     stream.WriteMore()
+}
+func Config_array5_json_marshal (stream *jsoniter.Stream, val []Availability) {
+  if len(val) == 0 {
+    stream.WriteEmptyArray()
+  } else {
+    stream.WriteArrayHead()
+    for i, elem := range val {
+      if i != 0 { stream.WriteMore() }
+    Availability_json_marshal(stream, elem)
+    }
+    stream.WriteArrayTail()
+  }
 }
