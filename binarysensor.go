@@ -41,7 +41,7 @@ func (b BinarySensor) Topic() ([]byte, error) {
 
 func (b BinarySensor) Marshal() ([]byte, error) {
 
-	if len(b.Availability) > 0 && b.AvailabilityTopic != "" {
+	if len(b.Availability) > 0 && b.AvailabilityTopic != nil {
 		return nil, errors.New("avilability and availability topic are both set")
 	}
 	if len(b.Availability) > 0 {
