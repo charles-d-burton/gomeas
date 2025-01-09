@@ -3,34 +3,33 @@ package gomeas
 import (
 	"errors"
 	jsoniter "github.com/json-iterator/tinygo"
-
 )
 
 // homeassistant.com/integrations/binary_sensor.mqtt/
 //
 //go:generate go run github.com/json-iterator/tinygo/gen ./generated/
 type BinarySensor struct {
-  Config
-	Encoding               string  `json:"encoding,omitempty"`
-	EntityCategory         string  `json:"entity_category,omitempty"`
-	EntityPicture          string  `json:"entity_picture,omitempty"`
-	ExpireAfter            int     `json:"expire_after,omitempty"`
-	ForceUpdate            bool    `json:"force_update,omitempty"`
-	Icon                   string  `json:"icon,omitempty"`
-	JsonAttributesTemplate string  `json:"json_attributes_template,omitempty"`
-	JsonAttributesTopic    string  `json:"json_attributes_topic,omitempty"`
-	Name                   string  `json:"name,omitempty"`
-	ObjectID               string  `json:"object_id,omitempty"`
-	OffDelay               int     `json:"off_delay,omitempty"`
-	PayloadAvailable       string  `json:"payload_available,omitempty"`
-	PayloadNotAvailable    string  `json:"payload_not_available,omitempty"`
-	PayloadOff             string  `json:"payload_off,omitempty"`
-	PayloadOn              string  `json:"payload_on,omitempty"`
-	Platform               string  `json:"platform"`
-	Qos                    int     `json:"qos,omitempty"`
-	StateTopic             string  `json:"state_topic"`
-	UniqueID               string  `json:"unique_id,omitempty"`
-	ValueTemplate          string  `json:"value_template,omitempty"`
+	Config
+	Encoding               string `json:"encoding,omitempty"`
+	EntityCategory         string `json:"entity_category,omitempty"`
+	EntityPicture          string `json:"entity_picture,omitempty"`
+	ExpireAfter            int    `json:"expire_after,omitempty"`
+	ForceUpdate            bool   `json:"force_update,omitempty"`
+	Icon                   string `json:"icon,omitempty"`
+	JsonAttributesTemplate string `json:"json_attributes_template,omitempty"`
+	JsonAttributesTopic    string `json:"json_attributes_topic,omitempty"`
+	Name                   string `json:"name,omitempty"`
+	ObjectID               string `json:"object_id,omitempty"`
+	OffDelay               int    `json:"off_delay,omitempty"`
+	PayloadAvailable       string `json:"payload_available,omitempty"`
+	PayloadNotAvailable    string `json:"payload_not_available,omitempty"`
+	PayloadOff             string `json:"payload_off,omitempty"`
+	PayloadOn              string `json:"payload_on,omitempty"`
+	Platform               string `json:"platform"`
+	Qos                    int    `json:"qos,omitempty"`
+	StateTopic             string `json:"state_topic"`
+	UniqueID               string `json:"unique_id,omitempty"`
+	ValueTemplate          string `json:"value_template,omitempty"`
 }
 
 func (b BinarySensor) Topic() ([]byte, error) {
@@ -56,7 +55,7 @@ func (b BinarySensor) Marshal() ([]byte, error) {
 	if b.StateTopic == "" {
 		return nil, errors.New("state topic is empty")
 	}
-  json := jsoniter.CreateJsonAdapter(BinarySensor_json{}, Device_json{})
+	json := jsoniter.CreateJsonAdapter(BinarySensor_json{}, Device_json{})
 	return json.Marshal(b)
 }
 
@@ -76,7 +75,7 @@ func (bss BinarySensorState) Topic() ([]byte, error) {
 func (bss BinarySensorState) Marshal() ([]byte, error) {
 	switch bss.State {
 	case "ON", "OFF":
-    json := jsoniter.CreateJsonAdapter(BinarySensorState_json{})
+		json := jsoniter.CreateJsonAdapter(BinarySensorState_json{})
 		return json.Marshal(bss)
 	default:
 		return nil, errors.New("state is not ON or OFF")

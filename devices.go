@@ -2,8 +2,8 @@ package gomeas
 
 import (
 	"errors"
-	"strings"
 	jsoniter "github.com/json-iterator/tinygo"
+	"strings"
 )
 
 type Message interface {
@@ -20,43 +20,43 @@ type Components = map[string]Component
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Config struct {
-	ConfigTopic   string       `json:"-"`
-	Availability []Availability `json:"availability,omitempty"`
-	AvailibilityMode       string  `json:"availibility_mode,omitempty"`
-	AvailabilityTemplate   string  `json:"availability_template,omitempty"`
-	AvailabilityTopic      string  `json:"availability_topic,omitempty"`
-	Name          string       `json:"name"`
-	DeviceClass   string       `json:"device_class"`
-	StateTopic    *string       `json:"state_topic,omitempty"`
-	ComamandTopic *string       `json:"command_topic,omitempty"`
-	UniqueID      string       `json:"unique_id"`
-	Device        *Device       `json:"device,omitempty"`
-	Components    Components `json:"components,omitempty"`
-	EnabledByDefault       bool    `json:"enabled_by_default,omitempty"`
+	ConfigTopic          string          `json:"-"`
+	Availability         []*Availability `json:"availability,omitempty"`
+	AvailibilityMode     *string         `json:"availibility_mode,omitempty"`
+	AvailabilityTemplate *string         `json:"availability_template,omitempty"`
+	AvailabilityTopic    *string         `json:"availability_topic,omitempty"`
+	Name                 string          `json:"name"`
+	DeviceClass          string          `json:"device_class"`
+	StateTopic           *string         `json:"state_topic,omitempty"`
+	ComamandTopic        *string         `json:"command_topic,omitempty"`
+	UniqueID             string          `json:"unique_id"`
+	Device               *Device         `json:"device,omitempty"`
+	Components           Components      `json:"components,omitempty"`
+	EnabledByDefault     bool            `json:"enabled_by_default,omitempty"`
 }
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Device struct {
-	ConfigurationURL *string   `json:"configuration_url,omitempty"`
+	ConfigurationURL *string  `json:"configuration_url,omitempty"`
 	Connections      []string `json:"connections,omitempty"`
-	HardwareVersion  *string   `json:"hw_version,omitempty"`
+	HardwareVersion  *string  `json:"hw_version,omitempty"`
 	Identifiers      []string `json:"identifiers,omitempty"`
-	Manufacturer     *string   `json:"manufacturer,omitempty"`
-	Model            *string   `json:"model,omitempty"`
-	ModelID          *string   `json:"model_id,omitempty"`
-	Name             *string   `json:"name,omitempty"`
-	SerialNumber     *string   `json:"serial_number,omitempty"`
-	SuggestedArea    *string   `json:"suggested_area,omitempty"`
-	SoftwareVersion  *string   `json:"software_version,omitempty"`
-	ViaDevice        *string   `json:"via_device,omitempty"`
+	Manufacturer     *string  `json:"manufacturer,omitempty"`
+	Model            *string  `json:"model,omitempty"`
+	ModelID          *string  `json:"model_id,omitempty"`
+	Name             *string  `json:"name,omitempty"`
+	SerialNumber     *string  `json:"serial_number,omitempty"`
+	SuggestedArea    *string  `json:"suggested_area,omitempty"`
+	SoftwareVersion  *string  `json:"software_version,omitempty"`
+	ViaDevice        *string  `json:"via_device,omitempty"`
 }
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Availability struct {
-  PayloadAvailable    string `json:"payload_available,omitempty"`
-  PayloadNotAvailable string `json:"payload_not_available,omitempty"`
-  Topic               string `json:"topic"`
-  ValueTemplate       string `json:"value_template,omitempty"`
+	PayloadAvailable    string `json:"payload_available,omitempty"`
+	PayloadNotAvailable string `json:"payload_not_available,omitempty"`
+	Topic               string `json:"topic"`
+	ValueTemplate       string `json:"value_template,omitempty"`
 }
 
 const (
@@ -74,17 +74,17 @@ type Component struct {
 }
 
 func (config Config) Marshal() ([]byte, error) {
-  if config.UniqueID == "" {
-    return nil, errors.New("config:unique_id-undefined")
-  }
-  if config.Name == "" {
-    return nil, errors.New("config:name-undefined")
-  }
-  if config.DeviceClass == "" {
-    return nil, errors.New("config:device_class-undefined")
-  }
+	if config.UniqueID == "" {
+		return nil, errors.New("config:unique_id-undefined")
+	}
+	if config.Name == "" {
+		return nil, errors.New("config:name-undefined")
+	}
+	if config.DeviceClass == "" {
+		return nil, errors.New("config:device_class-undefined")
+	}
 	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Components_json{}, Component_json{})
-  return json.Marshal(config)
+	return json.Marshal(config)
 }
 
 func (config Config) Topic() ([]byte, error) {

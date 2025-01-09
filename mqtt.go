@@ -203,4 +203,3 @@ func (mq *MQTT) Subscribe(ctx context.Context, topic string) error {
 	}
 	return nil
 }
-
