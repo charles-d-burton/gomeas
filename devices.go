@@ -83,9 +83,6 @@ func (config Config) Topic() ([]byte, error) {
 	if len(elements) != 4 && len(elements) != 5 {
 		return nil, errors.New("topic must be in the format: <discovery_prefix>/<component>/[<node_id>]/<object_id>/config")
 	}
-	if elements[1] != "device" {
-		return nil, errors.New(`second field of topic must be set to "device"`)
-	}
 	if elements[len(elements)-1] != "config" {
 		return nil, errors.New(`last field of the topic must be the word "config"`)
 	}
