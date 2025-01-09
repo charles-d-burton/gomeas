@@ -21,29 +21,45 @@ type Components = map[string]Component
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Config struct {
 	ConfigTopic   string       `json:"-"`
+	Availability Availabilities `json:"availability,omitempty"`
+	AvailibilityMode       string  `json:"availibility_mode,omitempty"`
+	AvailabilityTemplate   string  `json:"availability_template,omitempty"`
+	AvailabilityTopic      string  `json:"availability_topic,omitempty"`
 	Name          string       `json:"name"`
 	DeviceClass   string       `json:"device_class"`
-	StateTopic    *string       `json:"stat_t,omitempty"`
-	ComamandTopic *string       `json:"cmd_t,omitempty"`
+	StateTopic    *string       `json:"state_topic,omitempty"`
+	ComamandTopic *string       `json:"command_topic,omitempty"`
 	UniqueID      string       `json:"unique_id"`
-	Device        *Device       `json:"dev,omitempty"`
-	Components    Components `json:"cmps,omitempty"`
+	Device        *Device       `json:"device,omitempty"`
+	Components    Components `json:"components,omitempty"`
+	EnabledByDefault       bool    `json:"enabled_by_default,omitempty"`
 }
 
 //go:generate go run github.com/json-iterator/tinygo/gen
 type Device struct {
-	ConfigurationURL *string   `json:"cu,omitempty"`
-	Connections      []string `json:"cns,omitempty"`
-	HardwareVersion  *string   `json:"hw,omitempty"`
-	Identifiers      []string `json:"ids,omitempty"`
-	Manufacturer     *string   `json:"mf,omitempty"`
-	Model            *string   `json:"mdl,omitempty"`
-	ModelID          *string   `json:"mdl_id,omitempty"`
+	ConfigurationURL *string   `json:"configuration_url,omitempty"`
+	Connections      []string `json:"connections,omitempty"`
+	HardwareVersion  *string   `json:"hw_version,omitempty"`
+	Identifiers      []string `json:"identifiers,omitempty"`
+	Manufacturer     *string   `json:"manufacturer,omitempty"`
+	Model            *string   `json:"model,omitempty"`
+	ModelID          *string   `json:"model_id,omitempty"`
 	Name             *string   `json:"name,omitempty"`
-	SerialNumber     *string   `json:"sn,omitempty"`
-	SuggestedArea    *string   `json:"sa,omitempty"`
-	SoftwareVersion  *string   `json:"sw,omitempty"`
+	SerialNumber     *string   `json:"serial_number,omitempty"`
+	SuggestedArea    *string   `json:"suggested_area,omitempty"`
+	SoftwareVersion  *string   `json:"software_version,omitempty"`
 	ViaDevice        *string   `json:"via_device,omitempty"`
+}
+
+//go:generate go run github.com/json-iterator/tinygo/gen
+type Availabilities []*Availability
+
+//go:generate go run github.com/json-iterator/tinygo/gen
+type Availability struct {
+  PayloadAvailable    string `json:"payload_available,omitempty"`
+  PayloadNotAvailable string `json:"payload_not_available,omitempty"`
+  Topic               string `json:"topic"`
+  ValueTemplate       string `json:"value_template,omitempty"`
 }
 
 const (

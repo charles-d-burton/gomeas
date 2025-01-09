@@ -10,19 +10,7 @@ import (
 //
 //go:generate go run github.com/json-iterator/tinygo/gen ./generated/
 type BinarySensor struct {
-	ConfigTopic  string `json:"-"`
-	Device       Device `json:"device"`
-	Availability []struct {
-		PayloadAvailable    string `json:"payload_available,omitempty"`
-		PayloadNotAvailable string `json:"payload_not_available,omitempty"`
-		Topic               string `json:"topic"`
-		ValueTemplate       string `json:"value_template,omitempty"`
-	} `json:"availability,omitempty"`
-	AvailibilityMode       string  `json:"availibility_mode,omitempty"`
-	AvailabilityTemplate   string  `json:"availability_template,omitempty"`
-	AvailabilityTopic      string  `json:"availability_topic,omitempty"`
-	DeviceClass            *string `json:"device_class,omitempty"`
-	EnabledByDefault       bool    `json:"enabled_by_default,omitempty"`
+  Config
 	Encoding               string  `json:"encoding,omitempty"`
 	EntityCategory         string  `json:"entity_category,omitempty"`
 	EntityPicture          string  `json:"entity_picture,omitempty"`

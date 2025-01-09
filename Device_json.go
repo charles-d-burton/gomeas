@@ -26,37 +26,37 @@ func Device_json_unmarshal(iter *jsoniter.Iterator, out *Device) {
 }
 func Device_json_unmarshal_field(iter *jsoniter.Iterator, field string, out *Device) bool {
   switch {
-  case field == `cu`:
+  case field == `configuration_url`:
     Device_ptr1_json_unmarshal(iter, &(*out).ConfigurationURL)
     return true
-  case field == `cns`:
+  case field == `connections`:
     Device_array2_json_unmarshal(iter, &(*out).Connections)
     return true
-  case field == `hw`:
+  case field == `hw_version`:
     Device_ptr3_json_unmarshal(iter, &(*out).HardwareVersion)
     return true
-  case field == `ids`:
+  case field == `identifiers`:
     Device_array4_json_unmarshal(iter, &(*out).Identifiers)
     return true
-  case field == `mf`:
+  case field == `manufacturer`:
     Device_ptr5_json_unmarshal(iter, &(*out).Manufacturer)
     return true
-  case field == `mdl`:
+  case field == `model`:
     Device_ptr6_json_unmarshal(iter, &(*out).Model)
     return true
-  case field == `mdl_id`:
+  case field == `model_id`:
     Device_ptr7_json_unmarshal(iter, &(*out).ModelID)
     return true
   case field == `name`:
     Device_ptr8_json_unmarshal(iter, &(*out).Name)
     return true
-  case field == `sn`:
+  case field == `serial_number`:
     Device_ptr9_json_unmarshal(iter, &(*out).SerialNumber)
     return true
-  case field == `sa`:
+  case field == `suggested_area`:
     Device_ptr10_json_unmarshal(iter, &(*out).SuggestedArea)
     return true
-  case field == `sw`:
+  case field == `software_version`:
     Device_ptr11_json_unmarshal(iter, &(*out).SoftwareVersion)
     return true
   case field == `via_device`:
@@ -177,41 +177,41 @@ func Device_json_marshal(stream *jsoniter.Stream, val Device) {
     stream.WriteObjectTail()
 }
 func Device_json_marshal_field(stream *jsoniter.Stream, val Device) {
-    stream.WriteObjectField(`cu`)
+    stream.WriteObjectField(`configuration_url`)
     if val.ConfigurationURL == nil {
        stream.WriteNull()
     } else {
     stream.WriteString(*val.ConfigurationURL)
     }
     stream.WriteMore()
-    stream.WriteObjectField(`cns`)
+    stream.WriteObjectField(`connections`)
     Device_array13_json_marshal(stream, val.Connections)
     stream.WriteMore()
-    stream.WriteObjectField(`hw`)
+    stream.WriteObjectField(`hw_version`)
     if val.HardwareVersion == nil {
        stream.WriteNull()
     } else {
     stream.WriteString(*val.HardwareVersion)
     }
     stream.WriteMore()
-    stream.WriteObjectField(`ids`)
+    stream.WriteObjectField(`identifiers`)
     Device_array14_json_marshal(stream, val.Identifiers)
     stream.WriteMore()
-    stream.WriteObjectField(`mf`)
+    stream.WriteObjectField(`manufacturer`)
     if val.Manufacturer == nil {
        stream.WriteNull()
     } else {
     stream.WriteString(*val.Manufacturer)
     }
     stream.WriteMore()
-    stream.WriteObjectField(`mdl`)
+    stream.WriteObjectField(`model`)
     if val.Model == nil {
        stream.WriteNull()
     } else {
     stream.WriteString(*val.Model)
     }
     stream.WriteMore()
-    stream.WriteObjectField(`mdl_id`)
+    stream.WriteObjectField(`model_id`)
     if val.ModelID == nil {
        stream.WriteNull()
     } else {
@@ -225,21 +225,21 @@ func Device_json_marshal_field(stream *jsoniter.Stream, val Device) {
     stream.WriteString(*val.Name)
     }
     stream.WriteMore()
-    stream.WriteObjectField(`sn`)
+    stream.WriteObjectField(`serial_number`)
     if val.SerialNumber == nil {
        stream.WriteNull()
     } else {
     stream.WriteString(*val.SerialNumber)
     }
     stream.WriteMore()
-    stream.WriteObjectField(`sa`)
+    stream.WriteObjectField(`suggested_area`)
     if val.SuggestedArea == nil {
        stream.WriteNull()
     } else {
     stream.WriteString(*val.SuggestedArea)
     }
     stream.WriteMore()
-    stream.WriteObjectField(`sw`)
+    stream.WriteObjectField(`software_version`)
     if val.SoftwareVersion == nil {
        stream.WriteNull()
     } else {

@@ -25,28 +25,8 @@ func BinarySensor_json_unmarshal(iter *jsoniter.Iterator, out *BinarySensor) {
   }
 }
 func BinarySensor_json_unmarshal_field(iter *jsoniter.Iterator, field string, out *BinarySensor) bool {
+  if Config_json_unmarshal_field(iter, field, &out.Config) { return true }
   switch {
-  case field == `device`:
-    Device_json_unmarshal(iter, &(*out).Device)
-    return true
-  case field == `availability`:
-    BinarySensor_array1_json_unmarshal(iter, &(*out).Availability)
-    return true
-  case field == `availibility_mode`:
-    iter.ReadString(&(*out).AvailibilityMode)
-    return true
-  case field == `availability_template`:
-    iter.ReadString(&(*out).AvailabilityTemplate)
-    return true
-  case field == `availability_topic`:
-    iter.ReadString(&(*out).AvailabilityTopic)
-    return true
-  case field == `device_class`:
-    BinarySensor_ptr3_json_unmarshal(iter, &(*out).DeviceClass)
-    return true
-  case field == `enabled_by_default`:
-    iter.ReadBool(&(*out).EnabledByDefault)
-    return true
   case field == `encoding`:
     iter.ReadString(&(*out).Encoding)
     return true
@@ -110,114 +90,13 @@ func BinarySensor_json_unmarshal_field(iter *jsoniter.Iterator, field string, ou
   }
   return false
 }
-func BinarySensor_struct2_json_unmarshal_field (iter *jsoniter.Iterator, field string, out *struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}) bool {
-  switch {
-  case field == `payload_available`:
-    iter.ReadString(&(*out).PayloadAvailable)
-    return true
-  case field == `payload_not_available`:
-    iter.ReadString(&(*out).PayloadNotAvailable)
-    return true
-  case field == `topic`:
-    iter.ReadString(&(*out).Topic)
-    return true
-  case field == `value_template`:
-    iter.ReadString(&(*out).ValueTemplate)
-    return true
-  }
-  return false
-}
-func BinarySensor_struct2_json_unmarshal (iter *jsoniter.Iterator, out *struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}) {
-  more := iter.ReadObjectHead()
-  for more {
-    field := iter.ReadObjectField()
-    if !BinarySensor_struct2_json_unmarshal_field(iter, field, out) {
-      iter.Skip()
-    }
-    more = iter.ReadObjectMore()
-  }
-}
-func BinarySensor_array1_json_unmarshal (iter *jsoniter.Iterator, out *[]struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}) {
-  i := 0
-  val := *out
-  more := iter.ReadArrayHead()
-  for more {
-    if i == len(val) {
-      val = append(val, make([]struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}, 4)...)
-    }
-    BinarySensor_struct2_json_unmarshal(iter, &val[i])
-    i++
-    more = iter.ReadArrayMore()
-  }
-  if i == 0 {
-    *out = []struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}{}
-  } else {
-    *out = val[:i]
-  }
-}
-func BinarySensor_ptr3_json_unmarshal (iter *jsoniter.Iterator, out **string) {
-    var val string
-    iter.ReadString(&val)
-    if iter.Error == nil {
-      *out = &val
-    }
-}
 func BinarySensor_json_marshal(stream *jsoniter.Stream, val BinarySensor) {
     stream.WriteObjectHead()
     BinarySensor_json_marshal_field(stream, val)
     stream.WriteObjectTail()
 }
 func BinarySensor_json_marshal_field(stream *jsoniter.Stream, val BinarySensor) {
-    stream.WriteObjectField(`device`)
-    Device_json_marshal(stream, val.Device)
-    stream.WriteMore()
-    stream.WriteObjectField(`availability`)
-    BinarySensor_array4_json_marshal(stream, val.Availability)
-    stream.WriteMore()
-    stream.WriteObjectField(`availibility_mode`)
-    stream.WriteString(val.AvailibilityMode)
-    stream.WriteMore()
-    stream.WriteObjectField(`availability_template`)
-    stream.WriteString(val.AvailabilityTemplate)
-    stream.WriteMore()
-    stream.WriteObjectField(`availability_topic`)
-    stream.WriteString(val.AvailabilityTopic)
-    stream.WriteMore()
-    stream.WriteObjectField(`device_class`)
-    if val.DeviceClass == nil {
-       stream.WriteNull()
-    } else {
-    stream.WriteString(*val.DeviceClass)
-    }
-    stream.WriteMore()
-    stream.WriteObjectField(`enabled_by_default`)
-    stream.WriteBool(val.EnabledByDefault)
-    stream.WriteMore()
+    Config_json_marshal_field(stream, val.Config)
     stream.WriteObjectField(`encoding`)
     stream.WriteString(val.Encoding)
     stream.WriteMore()
@@ -278,50 +157,4 @@ func BinarySensor_json_marshal_field(stream *jsoniter.Stream, val BinarySensor) 
     stream.WriteObjectField(`value_template`)
     stream.WriteString(val.ValueTemplate)
     stream.WriteMore()
-}
-func BinarySensor_struct5_json_marshal_field (stream *jsoniter.Stream, val struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}) {
-    stream.WriteObjectField(`payload_available`)
-    stream.WriteString(val.PayloadAvailable)
-    stream.WriteMore()
-    stream.WriteObjectField(`payload_not_available`)
-    stream.WriteString(val.PayloadNotAvailable)
-    stream.WriteMore()
-    stream.WriteObjectField(`topic`)
-    stream.WriteString(val.Topic)
-    stream.WriteMore()
-    stream.WriteObjectField(`value_template`)
-    stream.WriteString(val.ValueTemplate)
-    stream.WriteMore()
-}
-func BinarySensor_struct5_json_marshal (stream *jsoniter.Stream, val struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}) {
-    stream.WriteObjectHead()
-    BinarySensor_struct5_json_marshal_field(stream, val)
-    stream.WriteObjectTail()
-}
-func BinarySensor_array4_json_marshal (stream *jsoniter.Stream, val []struct {
-	PayloadAvailable	string	`json:"payload_available,omitempty"`
-	PayloadNotAvailable	string	`json:"payload_not_available,omitempty"`
-	Topic			string	`json:"topic"`
-	ValueTemplate		string	`json:"value_template,omitempty"`
-}) {
-  if len(val) == 0 {
-    stream.WriteEmptyArray()
-  } else {
-    stream.WriteArrayHead()
-    for i, elem := range val {
-      if i != 0 { stream.WriteMore() }
-    BinarySensor_struct5_json_marshal(stream, elem)
-    }
-    stream.WriteArrayTail()
-  }
 }
