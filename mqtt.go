@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"io"
-	"math/rand/v2"
 	"time"
 
 	mqtt "github.com/soypat/natiu-mqtt"
@@ -76,7 +75,7 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 // TODO: Handle the dependency injection better
 func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (*MQTT, <-chan []byte, error) {
 	if options.ClientID == "" {
-		options.ClientID = randSeq(8)
+		options.ClientID = GenerateId(8)
 	}
 
 	mq := &MQTT{
@@ -205,19 +204,3 @@ func (mq *MQTT) Subscribe(ctx context.Context, topic string) error {
 	return nil
 }
 
-func randInt16() uint16 {
-	var a = rand.Uint32()
-	a %= (65535 - 1)
-	a += 1
-	return uint16(a)
-}
-
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-
-func randSeq(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.IntN(len(letters))]
-	}
-	return string(b)
-}

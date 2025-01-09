@@ -61,6 +61,15 @@ type Component struct {
 }
 
 func (config Config) Marshal() ([]byte, error) {
+  if config.UniqueID == "" {
+    return nil, errors.New("config:unique_id-undefined")
+  }
+  if config.Name == "" {
+    return nil, errors.New("config:name-undefined")
+  }
+  if config.DeviceClass == "" {
+    return nil, errors.New("config:device_class-undefined")
+  }
 	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Components_json{}, Component_json{})
   return json.Marshal(config)
 }
