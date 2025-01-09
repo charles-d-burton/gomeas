@@ -2,8 +2,9 @@ package gomeas
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/tinygo"
 	"strings"
+
+	"github.com/mailru/easyjson"
 )
 
 type Message interface {
@@ -15,10 +16,8 @@ type DeviceConfig interface {
 	GetConfig() ([]byte, error)
 }
 
-//go:generate go run github.com/json-iterator/tinygo/gen
 type Components = map[string]Component
 
-//go:generate go run github.com/json-iterator/tinygo/gen
 type Config struct {
 	ConfigTopic          string          `json:"-"`
 	Availability         []*Availability `json:"availability,omitempty"`
@@ -35,7 +34,6 @@ type Config struct {
 	EnabledByDefault     bool            `json:"enabled_by_default,omitempty"`
 }
 
-//go:generate go run github.com/json-iterator/tinygo/gen
 type Device struct {
 	ConfigurationURL *string  `json:"configuration_url,omitempty"`
 	Connections      []string `json:"connections,omitempty"`
@@ -51,7 +49,6 @@ type Device struct {
 	ViaDevice        *string  `json:"via_device,omitempty"`
 }
 
-//go:generate go run github.com/json-iterator/tinygo/gen
 type Availability struct {
 	PayloadAvailable    string `json:"payload_available,omitempty"`
 	PayloadNotAvailable string `json:"payload_not_available,omitempty"`
@@ -83,8 +80,8 @@ func (config Config) Marshal() ([]byte, error) {
 	if config.DeviceClass == "" {
 		return nil, errors.New("config:device_class-undefined")
 	}
-	json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Components_json{}, Component_json{})
-	return json.Marshal(config)
+	// json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Components_json{}, Component_json{})
+	return easyjson.Marshal(config)
 }
 
 func (config Config) Topic() ([]byte, error) {

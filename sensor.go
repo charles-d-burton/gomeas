@@ -2,8 +2,9 @@ package gomeas
 
 import (
 	"errors"
-	jsoniter "github.com/json-iterator/tinygo"
 	"strings"
+
+	"github.com/mailru/easyjson"
 )
 
 //go:generate go run github.com/json-iterator/tinygo/gen
@@ -19,8 +20,8 @@ func (sensor Sensor) Marshal() ([]byte, error) {
 	if sensor.Name == "" {
 		return nil, errors.New("sensor:name-undefined")
 	}
-	json := jsoniter.CreateJsonAdapter(Sensor_json{}, Device_json{}, Components_json{}, Component_json{}, Config_json{})
-	return json.Marshal(sensor)
+	// json := jsoniter.CreateJsonAdapter(Sensor_json{}, Device_json{}, Components_json{}, Component_json{}, Config_json{})
+	return easyjson.Marshal(sensor)
 }
 
 func (sensor Sensor) Topic() ([]byte, error) {
