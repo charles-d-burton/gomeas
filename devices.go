@@ -7,7 +7,7 @@ import (
 
 type Message interface {
 	Marshal() ([]byte, error)
-	Topic() ([]byte, error)
+	GetConfigTopic() ([]byte, error)
 }
 
 type Components = map[string]Component
@@ -21,7 +21,7 @@ type Config struct {
 	Name                 string          `json:"name"`
 	DeviceClass          string          `json:"device_class"`
 	StateTopic           *string         `json:"state_topic,omitempty"`
-	ComamandTopic        *string         `json:"command_topic,omitempty"`
+	CommandTopic         *string         `json:"command_topic,omitempty"`
 	UniqueID             string          `json:"unique_id"`
 	Device               *Device         `json:"device,omitempty"`
 	Components           Components      `json:"components,omitempty"`

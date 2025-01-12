@@ -116,12 +116,12 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *
 		case "command_topic":
 			if in.IsNull() {
 				in.Skip()
-				out.ComamandTopic = nil
+				out.CommandTopic = nil
 			} else {
-				if out.ComamandTopic == nil {
-					out.ComamandTopic = new(string)
+				if out.CommandTopic == nil {
+					out.CommandTopic = new(string)
 				}
-				*out.ComamandTopic = string(in.String())
+				*out.CommandTopic = string(in.String())
 			}
 		case "unique_id":
 			out.UniqueID = string(in.String())
@@ -260,7 +260,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 		}
 		out.String(string(*in.StateTopic))
 	}
-	if in.ComamandTopic != nil {
+	if in.CommandTopic != nil {
 		const prefix string = ",\"command_topic\":"
 		if first {
 			first = false
@@ -268,7 +268,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(*in.ComamandTopic))
+		out.String(string(*in.CommandTopic))
 	}
 	if in.UniqueID != "" {
 		const prefix string = ",\"unique_id\":"

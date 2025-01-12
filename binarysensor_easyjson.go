@@ -213,12 +213,12 @@ func easyjsonFf1721c5DecodeGithubComCharlesDBurtonGomeas1(in *jlexer.Lexer, out 
 		case "command_topic":
 			if in.IsNull() {
 				in.Skip()
-				out.ComamandTopic = nil
+				out.CommandTopic = nil
 			} else {
-				if out.ComamandTopic == nil {
-					out.ComamandTopic = new(string)
+				if out.CommandTopic == nil {
+					out.CommandTopic = new(string)
 				}
-				*out.ComamandTopic = string(in.String())
+				*out.CommandTopic = string(in.String())
 			}
 		case "device":
 			if in.IsNull() {
@@ -525,7 +525,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		}
 		out.String(string(in.DeviceClass))
 	}
-	if in.ComamandTopic != nil {
+	if in.CommandTopic != nil {
 		const prefix string = ",\"command_topic\":"
 		if first {
 			first = false
@@ -533,7 +533,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(*in.ComamandTopic))
+		out.String(string(*in.CommandTopic))
 	}
 	if in.Device != nil {
 		const prefix string = ",\"device\":"

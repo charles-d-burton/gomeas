@@ -36,12 +36,10 @@ func easyjsonF248ab8DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *B
 			continue
 		}
 		switch key {
-		case "command_topic":
-			out.CommandTopic = string(in.String())
-		case "platform":
-			out.Platform = string(in.String())
 		case "command_template":
 			out.CommandTemplate = string(in.String())
+		case "platform":
+			out.Platform = string(in.String())
 		case "availability":
 			if in.IsNull() {
 				in.Skip()
@@ -120,12 +118,12 @@ func easyjsonF248ab8DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *B
 		case "command_topic":
 			if in.IsNull() {
 				in.Skip()
-				out.ComamandTopic = nil
+				out.CommandTopic = nil
 			} else {
-				if out.ComamandTopic == nil {
-					out.ComamandTopic = new(string)
+				if out.CommandTopic == nil {
+					out.CommandTopic = new(string)
 				}
-				*out.ComamandTopic = string(in.String())
+				*out.CommandTopic = string(in.String())
 			}
 		case "unique_id":
 			out.UniqueID = string(in.String())
@@ -175,11 +173,11 @@ func easyjsonF248ab8EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in 
 	out.RawByte('{')
 	first := true
 	_ = first
-	if in.CommandTopic != "" {
-		const prefix string = ",\"command_topic\":"
+	if in.CommandTemplate != "" {
+		const prefix string = ",\"command_template\":"
 		first = false
 		out.RawString(prefix[1:])
-		out.String(string(in.CommandTopic))
+		out.String(string(in.CommandTemplate))
 	}
 	if in.Platform != "" {
 		const prefix string = ",\"platform\":"
@@ -190,16 +188,6 @@ func easyjsonF248ab8EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in 
 			out.RawString(prefix)
 		}
 		out.String(string(in.Platform))
-	}
-	if in.CommandTemplate != "" {
-		const prefix string = ",\"command_template\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.CommandTemplate))
 	}
 	if len(in.Availability) != 0 {
 		const prefix string = ",\"availability\":"
@@ -284,7 +272,7 @@ func easyjsonF248ab8EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in 
 		}
 		out.String(string(*in.StateTopic))
 	}
-	if in.ComamandTopic != nil {
+	if in.CommandTopic != nil {
 		const prefix string = ",\"command_topic\":"
 		if first {
 			first = false
@@ -292,7 +280,7 @@ func easyjsonF248ab8EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in 
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(*in.ComamandTopic))
+		out.String(string(*in.CommandTopic))
 	}
 	if in.UniqueID != "" {
 		const prefix string = ",\"unique_id\":"
