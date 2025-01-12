@@ -7,8 +7,6 @@ import (
 )
 
 // homeassistant.com/integrations/binary_sensor.mqtt/
-//
-//go:generate go run github.com/json-iterator/tinygo/gen ./generated/
 type BinarySensor struct {
 	Config
 	Encoding               string `json:"encoding,omitempty"`
@@ -33,52 +31,43 @@ type BinarySensor struct {
 	ValueTemplate          string `json:"value_template,omitempty"`
 }
 
-func (b BinarySensor) Topic() ([]byte, error) {
-	if b.ConfigTopic == "" {
-		return nil, errors.New("ConfigTopic is empty")
+func NewBinarySensor(config Config) (*BinarySensor, error) {
+	return &BinarySensor{Config: config}, nil
+}
+
+func (b *BinarySensor) Topic() ([]byte, error) {
+	err := b.validateComponent("binary_sensor")
+	if err != nil {
+		return nil, err
 	}
 	return []byte(b.ConfigTopic), nil
 }
 
-func (b BinarySensor) Marshal() ([]byte, error) {
-
-	if len(b.Availability) > 0 && b.AvailabilityTopic != nil {
-		return nil, errors.New("avilability and availability topic are both set")
-	}
-	if len(b.Availability) > 0 {
-		for _, av := range b.Availability {
-			if av.Topic == "" {
-				return nil, errors.New("availability topic is empty")
-			}
-		}
-	}
+func (b *BinarySensor) Marshal() ([]byte, error) {
 	b.Platform = "binary_sensor" //enforced by documentation
 	if b.StateTopic == "" {
-		return nil, errors.New("state topic is empty")
+		return nil, errors.New("error:state topic is empty")
 	}
-	// json := jsoniter.CreateJsonAdapter(BinarySensor_json{}, Device_json{})
 	return easyjson.Marshal(b)
 }
 
-//go:generate go run github.com/json-iterator/tinygo/gen
 type BinarySensorState struct {
-	ConfigTopic string `json:"-"`
-	State       string `json:"state"`
+	StateTopic string `json:"-"`
+	State      string `json:"state"`
 }
 
-func (bss BinarySensorState) Topic() ([]byte, error) {
-	if bss.ConfigTopic == "" {
-		return nil, errors.New("ConfigTopic is empty")
+func (bss *BinarySensorState) Topic() ([]byte, error) {
+	if bss.StateTopic == "" {
+		return nil, errors.New("error: state topic is empty")
 	}
-	return []byte(bss.ConfigTopic), nil
+	return []byte(bss.StateTopic), nil
 }
 
-func (bss BinarySensorState) Marshal() ([]byte, error) {
+func (bss *BinarySensorState) Marshal() ([]byte, error) {
 	switch bss.State {
 	case "ON", "OFF":
-		// json := jsoniter.CreateJsonAdapter(BinarySensorState_json{})
 		return easyjson.Marshal(bss)
 	default:
-		return nil, errors.New("state is not ON or OFF")
+		return nil, errors.New("error:state is not ON or OFF")
 	}
 }

@@ -3,17 +3,11 @@ package gomeas
 import (
 	"errors"
 	"strings"
-
-	"github.com/mailru/easyjson"
 )
 
 type Message interface {
 	Marshal() ([]byte, error)
 	Topic() ([]byte, error)
-}
-
-type DeviceConfig interface {
-	GetConfig() ([]byte, error)
 }
 
 type Components = map[string]Component
@@ -56,12 +50,6 @@ type Availability struct {
 	ValueTemplate       string `json:"value_template,omitempty"`
 }
 
-const (
-	CELSIUS    = `°C`
-	FAHRENHEIT = `°F`
-)
-
-//go:generate go run github.com/json-iterator/tinygo/gen
 type Component struct {
 	P                 string `json:"p"`
 	DeviceClass       string `json:"device_class"`
@@ -70,31 +58,36 @@ type Component struct {
 	UniqueID          string `json:"unique_id"`
 }
 
-func (config Config) Marshal() ([]byte, error) {
-	if config.UniqueID == "" {
-		return nil, errors.New("config:unique_id-undefined")
+func (config *Config) validateComponent(component string) error {
+	if config.ConfigTopic == "" {
+		return errors.New("must set topic to initialize device discovery")
 	}
-	if config.Name == "" {
-		return nil, errors.New("config:name-undefined")
+
+	elements := strings.Split(config.ConfigTopic, "/")
+	if len(elements) != 4 && len(elements) != 5 {
+		return errors.New("error:topic must be in the format: <discovery_prefix>/<component>/[<node_id>]/<object_id>/config")
 	}
-	if config.DeviceClass == "" {
-		return nil, errors.New("config:device_class-undefined")
+
+	if elements[len(elements)-1] != "config" {
+		return errors.New(`error:last field of the topic must be the word "config"`)
 	}
-	// json := jsoniter.CreateJsonAdapter(Config_json{}, Device_json{}, Components_json{}, Component_json{})
-	return easyjson.Marshal(config)
+
+	if elements[1] != component {
+		return errors.New(`error:second field of topic must be the word ` + component)
+	}
+	return nil
 }
 
-func (config Config) Topic() ([]byte, error) {
-	if config.ConfigTopic == "" {
-		return nil, errors.New("must set configuration topic to initialize device discovery")
+func (config *Config) validateAvailability() error {
+	if len(config.Availability) > 0 && config.AvailabilityTopic != nil {
+		return errors.New("error:avilability and availability topic are both set")
 	}
-	elements := strings.Split(config.ConfigTopic, "/")
-	println(len(elements))
-	if len(elements) != 4 && len(elements) != 5 {
-		return nil, errors.New("topic must be in the format: <discovery_prefix>/<component>/[<node_id>]/<object_id>/config")
+	if len(config.Availability) > 0 {
+		for _, av := range config.Availability {
+			if av.Topic == "" {
+				return errors.New("error:availability topic is empty")
+			}
+		}
 	}
-	if elements[len(elements)-1] != "config" {
-		return nil, errors.New(`last field of the topic must be the word "config"`)
-	}
-	return []byte(config.ConfigTopic), nil
+	return nil
 }

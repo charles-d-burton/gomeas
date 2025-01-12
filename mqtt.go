@@ -103,6 +103,7 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 				case <-ctx.Done():
 					return nil
 				default:
+					println("warn:writing to a full channel")
 					//Ignores message if buffer full
 				}
 			}

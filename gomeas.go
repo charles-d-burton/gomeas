@@ -4,6 +4,11 @@ import (
 	"math/rand/v2"
 )
 
+const (
+	CELSIUS    = `°C`
+	FAHRENHEIT = `°F`
+)
+
 func randInt16() uint16 {
 	var a = rand.Uint32()
 	a %= (65535 - 1)
