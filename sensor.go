@@ -11,6 +11,10 @@ type Sensor struct {
 	Platform string `json:"platform"`
 }
 
+func NewSensor(config Config) (*Sensor, error) {
+	return &Sensor{Config: config}, nil
+}
+
 func (sensor *Sensor) Topic() ([]byte, error) {
 	err := sensor.validateComponent("sensor")
 	if err != nil {
