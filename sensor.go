@@ -79,7 +79,7 @@ const (
 
 type Temperature struct {
   Topic string `json:"-"`
-  TempReading string `json:"temperature"`
+  TempReading float32 `json:"temperature"`
 }
 
 func(t *Temperature) GetTopic() ([]byte, error) {
@@ -95,7 +95,7 @@ func (t *Temperature) Marshal() ([]byte, error) {
 
 type Humidity struct {
   Topic string `json:"-"`
-  HumidityReading string `json:"humidity"`
+  HumidityReading float32 `json:"humidity"`
 }
 
 func (h *Humidity) GetTopic() ([]byte, error) {
@@ -111,8 +111,8 @@ func (h *Humidity) Marshal() ([]byte, error) {
 
 type TempAndHumidity struct {
   Topic string `json:"-"`
-  TempReading string `json:"temperature"`
-  HumidityReading string `json:"humidity"`
+  TempReading float32 `json:"temperature"`
+  HumidityReading float32 `json:"humidity"`
 }
 
 func (th *TempAndHumidity) GetTopic() ([]byte, error) {

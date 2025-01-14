@@ -37,7 +37,7 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *
 		}
 		switch key {
 		case "temperature":
-			out.TempReading = string(in.String())
+			out.TempReading = float32(in.Float32())
 		default:
 			in.SkipRecursive()
 		}
@@ -52,7 +52,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if in.TempReading != "" {
+	if in.TempReading != 0 {
 		const prefix string = ",\"temperature\":"
 		if first {
 			first = false
@@ -60,7 +60,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.TempReading))
+		out.Float32(float32(in.TempReading))
 	}
 	out.RawByte('}')
 }
@@ -108,9 +108,9 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas1(in *jlexer.Lexer, out 
 		}
 		switch key {
 		case "temperature":
-			out.TempReading = string(in.String())
+			out.TempReading = float32(in.Float32())
 		case "humidity":
-			out.HumidityReading = string(in.String())
+			out.HumidityReading = float32(in.Float32())
 		default:
 			in.SkipRecursive()
 		}
@@ -125,7 +125,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 	out.RawByte('{')
 	first := true
 	_ = first
-	if in.TempReading != "" {
+	if in.TempReading != 0 {
 		const prefix string = ",\"temperature\":"
 		if first {
 			first = false
@@ -133,9 +133,9 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.TempReading))
+		out.Float32(float32(in.TempReading))
 	}
-	if in.HumidityReading != "" {
+	if in.HumidityReading != 0 {
 		const prefix string = ",\"humidity\":"
 		if first {
 			first = false
@@ -143,7 +143,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.HumidityReading))
+		out.Float32(float32(in.HumidityReading))
 	}
 	out.RawByte('}')
 }
@@ -872,7 +872,7 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas3(in *jlexer.Lexer, out 
 		}
 		switch key {
 		case "humidity":
-			out.HumidityReading = string(in.String())
+			out.HumidityReading = float32(in.Float32())
 		default:
 			in.SkipRecursive()
 		}
@@ -887,7 +887,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas3(out *jwriter.Writer, i
 	out.RawByte('{')
 	first := true
 	_ = first
-	if in.HumidityReading != "" {
+	if in.HumidityReading != 0 {
 		const prefix string = ",\"humidity\":"
 		if first {
 			first = false
@@ -895,7 +895,7 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas3(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.HumidityReading))
+		out.Float32(float32(in.HumidityReading))
 	}
 	out.RawByte('}')
 }
