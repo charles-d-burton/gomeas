@@ -5,13 +5,14 @@ import (
 	"strings"
 )
 
-type Message interface {
-	Marshal() ([]byte, error)
-	GetTopic() ([]byte, error)
-}
-
 type Components = map[string]Component
 
+/*
+Config is a struct that holds the configuration for a device
+
+	These are the general defaults for most of the different auto-discovery
+	messages that Homeassistant accepts
+*/
 type Config struct {
 	ConfigTopic          string          `json:"-"`
 	Availability         []*Availability `json:"availability,omitempty"`
@@ -28,6 +29,7 @@ type Config struct {
 	EnabledByDefault     bool            `json:"enabled_by_default,omitempty"`
 }
 
+// Devices maps to the device specifications for Homeasisstant
 type Device struct {
 	ConfigurationURL *string  `json:"configuration_url,omitempty"`
 	Connections      []string `json:"connections,omitempty"`
@@ -43,6 +45,7 @@ type Device struct {
 	ViaDevice        *string  `json:"via_device,omitempty"`
 }
 
+// Availability is a struct that holds the availability configuration for a device
 type Availability struct {
 	PayloadAvailable    string `json:"payload_available,omitempty"`
 	PayloadNotAvailable string `json:"payload_not_available,omitempty"`

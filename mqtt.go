@@ -9,6 +9,7 @@ import (
 	mqtt "github.com/soypat/natiu-mqtt"
 )
 
+// MQTT is a struct that holds the connection to the MQTT broker
 type MQTT struct {
 	Username string
 	Password string
@@ -16,6 +17,7 @@ type MQTT struct {
 	client   *mqtt.Client
 }
 
+// Options is a struct that holds the options for the MQTT connection
 type Options struct {
 	Username string
 	Password string
@@ -72,25 +74,6 @@ func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 	}()
 }
 
-// TODO: Handle the dependency injection better
-func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (*MQTT, <-chan []byte, error) {
-	if options.ClientID == "" {
-		options.ClientID = GenerateId(8)
-	}
-
-	mq := &MQTT{
-		Username: options.Username,
-		Password: options.Password,
-		ClientID: options.ClientID,
-	}
-
-	data, err := mq.start(ctx, rwc)
-	if err != nil {
-		return nil, nil, err
-	}
-	return mq, data, nil
-}
-
 // Start connects to MQTT using the ReadWriteCloser you specifiy.  Likely a tinygo network connection
 func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byte, error) {
 	receiver := make(chan []byte, 2)
@@ -101,6 +84,7 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 				select {
 				case receiver <- message:
 				case <-ctx.Done():
+					close(receiver)
 					return nil
 				default:
 					println("warn:writing to a full channel")
@@ -140,6 +124,26 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 	return receiver, nil
 }
 
+// NewMQTTConnection creates a new MQTT connection using the provided ReadWriteCloser and options
+func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Options) (*MQTT, <-chan []byte, error) {
+	if options.ClientID == "" {
+		options.ClientID = GenerateId(8)
+	}
+
+	mq := &MQTT{
+		Username: options.Username,
+		Password: options.Password,
+		ClientID: options.ClientID,
+	}
+
+	data, err := mq.start(ctx, rwc)
+	if err != nil {
+		return nil, nil, err
+	}
+	return mq, data, nil
+}
+
+// Pubisher publishes messages to the MQTT broker on the  topic contained in the Message
 func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 	if !mq.client.IsConnected() {
 		time.Sleep(time.Second)
@@ -194,6 +198,7 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 	return nil
 }
 
+// Subscribe subscribes to the topic specified
 func (mq *MQTT) Subscribe(ctx context.Context, topic string) error {
 	var vsub mqtt.VariablesSubscribe
 	vsub.TopicFilters = []mqtt.SubscribeRequest{{TopicFilter: []byte(topic), QoS: mqtt.QoS0}}

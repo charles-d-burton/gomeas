@@ -6,13 +6,6 @@ import (
 	"github.com/mailru/easyjson"
 )
 
-type TemperatureUnits int
-
-const (
-	C TemperatureUnits = iota
-	F
-)
-
 type SensorOptions []string
 
 // https://www.home-assistant.io/integrations/sensor.mqtt/
@@ -65,64 +58,62 @@ func (sensor *Sensor) Marshal() ([]byte, error) {
 	return easyjson.Marshal(sensor)
 }
 
-
 /* This particular device has a lot of different possible permutations
- * Due to the constrained nature of tinygo they'll need ot be defined here
+ * Due to the constrained nature of tinygo they'll need to be defined here
  * Alternatively the writer can implement the Mmessage interface themselves
  * Adding commonly used ones here
  */
 
 const (
-  TemperatureTemplate = `{{ value_json.temperature }}`
-  HumidityTemplate = `{{ value_json.humidity }}`
+	TemperatureTemplate = `{{ value_json.temperature }}`
+	HumidityTemplate    = `{{ value_json.humidity }}`
 )
 
 type Temperature struct {
-  Topic string `json:"-"`
-  TempReading float32 `json:"temperature"`
+	Topic       string  `json:"-"`
+	TempReading float32 `json:"temperature"`
 }
 
-func(t *Temperature) GetTopic() ([]byte, error) {
-  if t.Topic == "" {
-    return nil, errors.New("error:topic not set") 
-  }
-  return []byte(t.Topic), nil
+func (t *Temperature) GetTopic() ([]byte, error) {
+	if t.Topic == "" {
+		return nil, errors.New("error:topic not set")
+	}
+	return []byte(t.Topic), nil
 }
 
 func (t *Temperature) Marshal() ([]byte, error) {
-  return easyjson.Marshal(t)
+	return easyjson.Marshal(t)
 }
 
 type Humidity struct {
-  Topic string `json:"-"`
-  HumidityReading float32 `json:"humidity"`
+	Topic           string  `json:"-"`
+	HumidityReading float32 `json:"humidity"`
 }
 
 func (h *Humidity) GetTopic() ([]byte, error) {
-  if h.Topic == "" {
-    return nil, errors.New("error:topic not set") 
-  }
-  return []byte(h.Topic), nil
+	if h.Topic == "" {
+		return nil, errors.New("error:topic not set")
+	}
+	return []byte(h.Topic), nil
 }
 
 func (h *Humidity) Marshal() ([]byte, error) {
-  return easyjson.Marshal(h)
+	return easyjson.Marshal(h)
 }
 
 type TempAndHumidity struct {
-  Topic string `json:"-"`
-  TempReading float32 `json:"temperature"`
-  HumidityReading float32 `json:"humidity"`
+	Topic           string  `json:"-"`
+	TempReading     float32 `json:"temperature"`
+	HumidityReading float32 `json:"humidity"`
 }
 
 func (th *TempAndHumidity) GetTopic() ([]byte, error) {
-  if th.Topic == "" {
-    return nil, errors.New("error:topic not set") 
-  }
-  return []byte(th.Topic), nil
+	if th.Topic == "" {
+		return nil, errors.New("error:topic not set")
+	}
+	return []byte(th.Topic), nil
 }
 
 func (th *TempAndHumidity) Marshal() ([]byte, error) {
-  return easyjson.Marshal(th)
+	return easyjson.Marshal(th)
 }
-
