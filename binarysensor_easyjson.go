@@ -110,43 +110,179 @@ func easyjsonFf1721c5DecodeGithubComCharlesDBurtonGomeas1(in *jlexer.Lexer, out 
 		case "encoding":
 			out.Encoding = string(in.String())
 		case "entity_category":
-			out.EntityCategory = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.EntityCategory = nil
+			} else {
+				if out.EntityCategory == nil {
+					out.EntityCategory = new(string)
+				}
+				*out.EntityCategory = string(in.String())
+			}
 		case "entity_picture":
-			out.EntityPicture = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.EntityPicture = nil
+			} else {
+				if out.EntityPicture == nil {
+					out.EntityPicture = new(string)
+				}
+				*out.EntityPicture = string(in.String())
+			}
 		case "expire_after":
-			out.ExpireAfter = int(in.Int())
+			if in.IsNull() {
+				in.Skip()
+				out.ExpireAfter = nil
+			} else {
+				if out.ExpireAfter == nil {
+					out.ExpireAfter = new(int)
+				}
+				*out.ExpireAfter = int(in.Int())
+			}
 		case "force_update":
-			out.ForceUpdate = bool(in.Bool())
+			if in.IsNull() {
+				in.Skip()
+				out.ForceUpdate = nil
+			} else {
+				if out.ForceUpdate == nil {
+					out.ForceUpdate = new(bool)
+				}
+				*out.ForceUpdate = bool(in.Bool())
+			}
 		case "icon":
-			out.Icon = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.Icon = nil
+			} else {
+				if out.Icon == nil {
+					out.Icon = new(string)
+				}
+				*out.Icon = string(in.String())
+			}
 		case "json_attributes_template":
-			out.JsonAttributesTemplate = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.JsonAttributesTemplate = nil
+			} else {
+				if out.JsonAttributesTemplate == nil {
+					out.JsonAttributesTemplate = new(string)
+				}
+				*out.JsonAttributesTemplate = string(in.String())
+			}
 		case "json_attributes_topic":
-			out.JsonAttributesTopic = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.JsonAttributesTopic = nil
+			} else {
+				if out.JsonAttributesTopic == nil {
+					out.JsonAttributesTopic = new(string)
+				}
+				*out.JsonAttributesTopic = string(in.String())
+			}
 		case "name":
-			out.Name = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.Name = nil
+			} else {
+				if out.Name == nil {
+					out.Name = new(string)
+				}
+				*out.Name = string(in.String())
+			}
 		case "object_id":
-			out.ObjectID = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.ObjectID = nil
+			} else {
+				if out.ObjectID == nil {
+					out.ObjectID = new(string)
+				}
+				*out.ObjectID = string(in.String())
+			}
 		case "off_delay":
-			out.OffDelay = int(in.Int())
+			if in.IsNull() {
+				in.Skip()
+				out.OffDelay = nil
+			} else {
+				if out.OffDelay == nil {
+					out.OffDelay = new(int)
+				}
+				*out.OffDelay = int(in.Int())
+			}
 		case "payload_available":
-			out.PayloadAvailable = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.PayloadAvailable = nil
+			} else {
+				if out.PayloadAvailable == nil {
+					out.PayloadAvailable = new(string)
+				}
+				*out.PayloadAvailable = string(in.String())
+			}
 		case "payload_not_available":
-			out.PayloadNotAvailable = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.PayloadNotAvailable = nil
+			} else {
+				if out.PayloadNotAvailable == nil {
+					out.PayloadNotAvailable = new(string)
+				}
+				*out.PayloadNotAvailable = string(in.String())
+			}
 		case "payload_off":
-			out.PayloadOff = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.PayloadOff = nil
+			} else {
+				if out.PayloadOff == nil {
+					out.PayloadOff = new(string)
+				}
+				*out.PayloadOff = string(in.String())
+			}
 		case "payload_on":
-			out.PayloadOn = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.PayloadOn = nil
+			} else {
+				if out.PayloadOn == nil {
+					out.PayloadOn = new(string)
+				}
+				*out.PayloadOn = string(in.String())
+			}
 		case "platform":
 			out.Platform = string(in.String())
 		case "qos":
-			out.Qos = int(in.Int())
+			if in.IsNull() {
+				in.Skip()
+				out.Qos = nil
+			} else {
+				if out.Qos == nil {
+					out.Qos = new(int)
+				}
+				*out.Qos = int(in.Int())
+			}
 		case "state_topic":
 			out.StateTopic = string(in.String())
 		case "unique_id":
-			out.UniqueID = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.UniqueID = nil
+			} else {
+				if out.UniqueID == nil {
+					out.UniqueID = new(string)
+				}
+				*out.UniqueID = string(in.String())
+			}
 		case "value_template":
-			out.ValueTemplate = string(in.String())
+			if in.IsNull() {
+				in.Skip()
+				out.ValueTemplate = nil
+			} else {
+				if out.ValueTemplate == nil {
+					out.ValueTemplate = new(string)
+				}
+				*out.ValueTemplate = string(in.String())
+			}
 		case "availability":
 			if in.IsNull() {
 				in.Skip()
@@ -272,7 +408,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		out.RawString(prefix[1:])
 		out.String(string(in.Encoding))
 	}
-	if in.EntityCategory != "" {
+	if in.EntityCategory != nil {
 		const prefix string = ",\"entity_category\":"
 		if first {
 			first = false
@@ -280,9 +416,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.EntityCategory))
+		out.String(string(*in.EntityCategory))
 	}
-	if in.EntityPicture != "" {
+	if in.EntityPicture != nil {
 		const prefix string = ",\"entity_picture\":"
 		if first {
 			first = false
@@ -290,9 +426,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.EntityPicture))
+		out.String(string(*in.EntityPicture))
 	}
-	if in.ExpireAfter != 0 {
+	if in.ExpireAfter != nil {
 		const prefix string = ",\"expire_after\":"
 		if first {
 			first = false
@@ -300,9 +436,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.Int(int(in.ExpireAfter))
+		out.Int(int(*in.ExpireAfter))
 	}
-	if in.ForceUpdate {
+	if in.ForceUpdate != nil {
 		const prefix string = ",\"force_update\":"
 		if first {
 			first = false
@@ -310,9 +446,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.Bool(bool(in.ForceUpdate))
+		out.Bool(bool(*in.ForceUpdate))
 	}
-	if in.Icon != "" {
+	if in.Icon != nil {
 		const prefix string = ",\"icon\":"
 		if first {
 			first = false
@@ -320,9 +456,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.Icon))
+		out.String(string(*in.Icon))
 	}
-	if in.JsonAttributesTemplate != "" {
+	if in.JsonAttributesTemplate != nil {
 		const prefix string = ",\"json_attributes_template\":"
 		if first {
 			first = false
@@ -330,9 +466,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.JsonAttributesTemplate))
+		out.String(string(*in.JsonAttributesTemplate))
 	}
-	if in.JsonAttributesTopic != "" {
+	if in.JsonAttributesTopic != nil {
 		const prefix string = ",\"json_attributes_topic\":"
 		if first {
 			first = false
@@ -340,9 +476,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.JsonAttributesTopic))
+		out.String(string(*in.JsonAttributesTopic))
 	}
-	if in.Name != "" {
+	if in.Name != nil {
 		const prefix string = ",\"name\":"
 		if first {
 			first = false
@@ -350,9 +486,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.Name))
+		out.String(string(*in.Name))
 	}
-	if in.ObjectID != "" {
+	if in.ObjectID != nil {
 		const prefix string = ",\"object_id\":"
 		if first {
 			first = false
@@ -360,9 +496,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.ObjectID))
+		out.String(string(*in.ObjectID))
 	}
-	if in.OffDelay != 0 {
+	if in.OffDelay != nil {
 		const prefix string = ",\"off_delay\":"
 		if first {
 			first = false
@@ -370,9 +506,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.Int(int(in.OffDelay))
+		out.Int(int(*in.OffDelay))
 	}
-	if in.PayloadAvailable != "" {
+	if in.PayloadAvailable != nil {
 		const prefix string = ",\"payload_available\":"
 		if first {
 			first = false
@@ -380,9 +516,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.PayloadAvailable))
+		out.String(string(*in.PayloadAvailable))
 	}
-	if in.PayloadNotAvailable != "" {
+	if in.PayloadNotAvailable != nil {
 		const prefix string = ",\"payload_not_available\":"
 		if first {
 			first = false
@@ -390,9 +526,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.PayloadNotAvailable))
+		out.String(string(*in.PayloadNotAvailable))
 	}
-	if in.PayloadOff != "" {
+	if in.PayloadOff != nil {
 		const prefix string = ",\"payload_off\":"
 		if first {
 			first = false
@@ -400,9 +536,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.PayloadOff))
+		out.String(string(*in.PayloadOff))
 	}
-	if in.PayloadOn != "" {
+	if in.PayloadOn != nil {
 		const prefix string = ",\"payload_on\":"
 		if first {
 			first = false
@@ -410,7 +546,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.PayloadOn))
+		out.String(string(*in.PayloadOn))
 	}
 	if in.Platform != "" {
 		const prefix string = ",\"platform\":"
@@ -422,7 +558,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		}
 		out.String(string(in.Platform))
 	}
-	if in.Qos != 0 {
+	if in.Qos != nil {
 		const prefix string = ",\"qos\":"
 		if first {
 			first = false
@@ -430,7 +566,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.Int(int(in.Qos))
+		out.Int(int(*in.Qos))
 	}
 	if in.StateTopic != "" {
 		const prefix string = ",\"state_topic\":"
@@ -442,7 +578,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		}
 		out.String(string(in.StateTopic))
 	}
-	if in.UniqueID != "" {
+	if in.UniqueID != nil {
 		const prefix string = ",\"unique_id\":"
 		if first {
 			first = false
@@ -450,9 +586,9 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.UniqueID))
+		out.String(string(*in.UniqueID))
 	}
-	if in.ValueTemplate != "" {
+	if in.ValueTemplate != nil {
 		const prefix string = ",\"value_template\":"
 		if first {
 			first = false
@@ -460,7 +596,7 @@ func easyjsonFf1721c5EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, i
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.ValueTemplate))
+		out.String(string(*in.ValueTemplate))
 	}
 	if len(in.Availability) != 0 {
 		const prefix string = ",\"availability\":"
