@@ -7,7 +7,7 @@ import (
 
 type Message interface {
 	Marshal() ([]byte, error)
-	GetConfigTopic() ([]byte, error)
+	GetTopic() ([]byte, error)
 }
 
 type Components = map[string]Component

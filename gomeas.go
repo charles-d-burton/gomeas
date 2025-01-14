@@ -7,6 +7,7 @@ import (
 const (
 	CELSIUS    = `°C`
 	FAHRENHEIT = `°F`
+  HUMIDITY = `%`
 )
 
 func randInt16() uint16 {

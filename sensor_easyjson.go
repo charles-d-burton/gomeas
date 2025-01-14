@@ -17,7 +17,161 @@ var (
 	_ easyjson.Marshaler
 )
 
-func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *Sensor) {
+func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *Temperature) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "temperature":
+			out.TempReading = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in Temperature) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	if in.TempReading != "" {
+		const prefix string = ",\"temperature\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.TempReading))
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v Temperature) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v Temperature) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *Temperature) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *Temperature) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(l, v)
+}
+func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas1(in *jlexer.Lexer, out *TempAndHumidity) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "temperature":
+			out.TempReading = string(in.String())
+		case "humidity":
+			out.HumidityReading = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas1(out *jwriter.Writer, in TempAndHumidity) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	if in.TempReading != "" {
+		const prefix string = ",\"temperature\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.TempReading))
+	}
+	if in.HumidityReading != "" {
+		const prefix string = ",\"humidity\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.HumidityReading))
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v TempAndHumidity) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas1(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v TempAndHumidity) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas1(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *TempAndHumidity) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas1(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *TempAndHumidity) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas1(l, v)
+}
+func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas2(in *jlexer.Lexer, out *Sensor) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -38,6 +192,173 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *
 		switch key {
 		case "platform":
 			out.Platform = string(in.String())
+		case "encoding":
+			if in.IsNull() {
+				in.Skip()
+				out.Encoding = nil
+			} else {
+				if out.Encoding == nil {
+					out.Encoding = new(string)
+				}
+				*out.Encoding = string(in.String())
+			}
+		case "entity_category":
+			if in.IsNull() {
+				in.Skip()
+				out.EntityCategory = nil
+			} else {
+				if out.EntityCategory == nil {
+					out.EntityCategory = new(string)
+				}
+				*out.EntityCategory = string(in.String())
+			}
+		case "entity_picture":
+			if in.IsNull() {
+				in.Skip()
+				out.EntityPicture = nil
+			} else {
+				if out.EntityPicture == nil {
+					out.EntityPicture = new(string)
+				}
+				*out.EntityPicture = string(in.String())
+			}
+		case "expire_after":
+			out.ExpireAfter = int(in.Int())
+		case "force_update":
+			out.ForceUpdate = bool(in.Bool())
+		case "icon":
+			if in.IsNull() {
+				in.Skip()
+				out.Icon = nil
+			} else {
+				if out.Icon == nil {
+					out.Icon = new(string)
+				}
+				*out.Icon = string(in.String())
+			}
+		case "json_attributes_template":
+			if in.IsNull() {
+				in.Skip()
+				out.JSONAttributesTemplate = nil
+			} else {
+				if out.JSONAttributesTemplate == nil {
+					out.JSONAttributesTemplate = new(string)
+				}
+				*out.JSONAttributesTemplate = string(in.String())
+			}
+		case "json_attributes_topic":
+			if in.IsNull() {
+				in.Skip()
+				out.JSONAttributesTopic = nil
+			} else {
+				if out.JSONAttributesTopic == nil {
+					out.JSONAttributesTopic = new(string)
+				}
+				*out.JSONAttributesTopic = string(in.String())
+			}
+		case "last_reset_value_template":
+			if in.IsNull() {
+				in.Skip()
+				out.LastResetValueTemplate = nil
+			} else {
+				if out.LastResetValueTemplate == nil {
+					out.LastResetValueTemplate = new(string)
+				}
+				*out.LastResetValueTemplate = string(in.String())
+			}
+		case "options":
+			if in.IsNull() {
+				in.Skip()
+				out.Options = nil
+			} else {
+				if out.Options == nil {
+					out.Options = new(SensorOptions)
+				}
+				if in.IsNull() {
+					in.Skip()
+					*out.Options = nil
+				} else {
+					in.Delim('[')
+					if *out.Options == nil {
+						if !in.IsDelim(']') {
+							*out.Options = make(SensorOptions, 0, 4)
+						} else {
+							*out.Options = SensorOptions{}
+						}
+					} else {
+						*out.Options = (*out.Options)[:0]
+					}
+					for !in.IsDelim(']') {
+						var v1 string
+						v1 = string(in.String())
+						*out.Options = append(*out.Options, v1)
+						in.WantComma()
+					}
+					in.Delim(']')
+				}
+			}
+		case "payload_available":
+			if in.IsNull() {
+				in.Skip()
+				out.PayloadAvailable = nil
+			} else {
+				if out.PayloadAvailable == nil {
+					out.PayloadAvailable = new(string)
+				}
+				*out.PayloadAvailable = string(in.String())
+			}
+		case "payload_not_available":
+			if in.IsNull() {
+				in.Skip()
+				out.PayloadNotAvailable = nil
+			} else {
+				if out.PayloadNotAvailable == nil {
+					out.PayloadNotAvailable = new(string)
+				}
+				*out.PayloadNotAvailable = string(in.String())
+			}
+		case "suggested_display_precision":
+			if in.IsNull() {
+				in.Skip()
+				out.SuggestedDisplayPrecision = nil
+			} else {
+				if out.SuggestedDisplayPrecision == nil {
+					out.SuggestedDisplayPrecision = new(int)
+				}
+				*out.SuggestedDisplayPrecision = int(in.Int())
+			}
+		case "qos":
+			out.QOS = int(in.Int())
+		case "state_class":
+			if in.IsNull() {
+				in.Skip()
+				out.StateClass = nil
+			} else {
+				if out.StateClass == nil {
+					out.StateClass = new(string)
+				}
+				*out.StateClass = string(in.String())
+			}
+		case "unit_of_measurement":
+			if in.IsNull() {
+				in.Skip()
+				out.UnitOfMeasurement = nil
+			} else {
+				if out.UnitOfMeasurement == nil {
+					out.UnitOfMeasurement = new(string)
+				}
+				*out.UnitOfMeasurement = string(in.String())
+			}
+		case "value_template":
+			if in.IsNull() {
+				in.Skip()
+				out.ValueTemplate = nil
+			} else {
+				if out.ValueTemplate == nil {
+					out.ValueTemplate = new(string)
+				}
+				*out.ValueTemplate = string(in.String())
+			}
 		case "availability":
 			if in.IsNull() {
 				in.Skip()
@@ -54,17 +375,17 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *
 					out.Availability = (out.Availability)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v1 *Availability
+					var v2 *Availability
 					if in.IsNull() {
 						in.Skip()
-						v1 = nil
+						v2 = nil
 					} else {
-						if v1 == nil {
-							v1 = new(Availability)
+						if v2 == nil {
+							v2 = new(Availability)
 						}
-						(*v1).UnmarshalEasyJSON(in)
+						(*v2).UnmarshalEasyJSON(in)
 					}
-					out.Availability = append(out.Availability, v1)
+					out.Availability = append(out.Availability, v2)
 					in.WantComma()
 				}
 				in.Delim(']')
@@ -148,9 +469,9 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *
 				for !in.IsDelim('}') {
 					key := string(in.String())
 					in.WantColon()
-					var v2 Component
-					(v2).UnmarshalEasyJSON(in)
-					(out.Components)[key] = v2
+					var v3 Component
+					(v3).UnmarshalEasyJSON(in)
+					(out.Components)[key] = v3
 					in.WantComma()
 				}
 				in.Delim('}')
@@ -167,7 +488,7 @@ func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(in *jlexer.Lexer, out *
 		in.Consumed()
 	}
 }
-func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in Sensor) {
+func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas2(out *jwriter.Writer, in Sensor) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -176,6 +497,187 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 		first = false
 		out.RawString(prefix[1:])
 		out.String(string(in.Platform))
+	}
+	if in.Encoding != nil {
+		const prefix string = ",\"encoding\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.Encoding))
+	}
+	if in.EntityCategory != nil {
+		const prefix string = ",\"entity_category\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.EntityCategory))
+	}
+	if in.EntityPicture != nil {
+		const prefix string = ",\"entity_picture\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.EntityPicture))
+	}
+	if in.ExpireAfter != 0 {
+		const prefix string = ",\"expire_after\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int(int(in.ExpireAfter))
+	}
+	if in.ForceUpdate {
+		const prefix string = ",\"force_update\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Bool(bool(in.ForceUpdate))
+	}
+	if in.Icon != nil {
+		const prefix string = ",\"icon\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.Icon))
+	}
+	if in.JSONAttributesTemplate != nil {
+		const prefix string = ",\"json_attributes_template\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.JSONAttributesTemplate))
+	}
+	if in.JSONAttributesTopic != nil {
+		const prefix string = ",\"json_attributes_topic\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.JSONAttributesTopic))
+	}
+	if in.LastResetValueTemplate != nil {
+		const prefix string = ",\"last_reset_value_template\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.LastResetValueTemplate))
+	}
+	if in.Options != nil {
+		const prefix string = ",\"options\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		if *in.Options == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v4, v5 := range *in.Options {
+				if v4 > 0 {
+					out.RawByte(',')
+				}
+				out.String(string(v5))
+			}
+			out.RawByte(']')
+		}
+	}
+	if in.PayloadAvailable != nil {
+		const prefix string = ",\"payload_available\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.PayloadAvailable))
+	}
+	if in.PayloadNotAvailable != nil {
+		const prefix string = ",\"payload_not_available\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.PayloadNotAvailable))
+	}
+	if in.SuggestedDisplayPrecision != nil {
+		const prefix string = ",\"suggested_display_precision\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int(int(*in.SuggestedDisplayPrecision))
+	}
+	if in.QOS != 0 {
+		const prefix string = ",\"qos\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int(int(in.QOS))
+	}
+	if in.StateClass != nil {
+		const prefix string = ",\"state_class\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.StateClass))
+	}
+	if in.UnitOfMeasurement != nil {
+		const prefix string = ",\"unit_of_measurement\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.UnitOfMeasurement))
+	}
+	if in.ValueTemplate != nil {
+		const prefix string = ",\"value_template\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(*in.ValueTemplate))
 	}
 	if len(in.Availability) != 0 {
 		const prefix string = ",\"availability\":"
@@ -187,14 +689,14 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 		}
 		{
 			out.RawByte('[')
-			for v3, v4 := range in.Availability {
-				if v3 > 0 {
+			for v6, v7 := range in.Availability {
+				if v6 > 0 {
 					out.RawByte(',')
 				}
-				if v4 == nil {
+				if v7 == nil {
 					out.RawString("null")
 				} else {
-					(*v4).MarshalEasyJSON(out)
+					(*v7).MarshalEasyJSON(out)
 				}
 			}
 			out.RawByte(']')
@@ -300,16 +802,16 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 		}
 		{
 			out.RawByte('{')
-			v5First := true
-			for v5Name, v5Value := range in.Components {
-				if v5First {
-					v5First = false
+			v8First := true
+			for v8Name, v8Value := range in.Components {
+				if v8First {
+					v8First = false
 				} else {
 					out.RawByte(',')
 				}
-				out.String(string(v5Name))
+				out.String(string(v8Name))
 				out.RawByte(':')
-				(v5Value).MarshalEasyJSON(out)
+				(v8Value).MarshalEasyJSON(out)
 			}
 			out.RawByte('}')
 		}
@@ -330,23 +832,94 @@ func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(out *jwriter.Writer, in
 // MarshalJSON supports json.Marshaler interface
 func (v Sensor) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(&w, v)
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas2(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v Sensor) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas(w, v)
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas2(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *Sensor) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(&r, v)
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas2(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *Sensor) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas(l, v)
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas2(l, v)
+}
+func easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas3(in *jlexer.Lexer, out *Humidity) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "humidity":
+			out.HumidityReading = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas3(out *jwriter.Writer, in Humidity) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	if in.HumidityReading != "" {
+		const prefix string = ",\"humidity\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.HumidityReading))
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v Humidity) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas3(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v Humidity) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjsonCf4941d2EncodeGithubComCharlesDBurtonGomeas3(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *Humidity) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas3(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *Humidity) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjsonCf4941d2DecodeGithubComCharlesDBurtonGomeas3(l, v)
 }

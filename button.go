@@ -16,7 +16,7 @@ func NewButton(config Config) (*Button, error) {
 	return &Button{Config: config}, nil
 }
 
-func (b *Button) GetConfigTopic() ([]byte, error) {
+func (b *Button) GetTopic() ([]byte, error) {
 	err := b.validateComponent("button")
 	if err != nil {
 		return nil, err

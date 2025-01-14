@@ -35,7 +35,7 @@ func NewBinarySensor(config Config) (*BinarySensor, error) {
 	return &BinarySensor{Config: config}, nil
 }
 
-func (b *BinarySensor) GetConfigTopic() ([]byte, error) {
+func (b *BinarySensor) GetTopic() ([]byte, error) {
 	err := b.validateComponent("binary_sensor")
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ type BinarySensorState struct {
 	State      string `json:"state"`
 }
 
-func (bss *BinarySensorState) GetConfigTopic() ([]byte, error) {
+func (bss *BinarySensorState) GetTopic() ([]byte, error) {
 	if bss.StateTopic == "" {
 		return nil, errors.New("error: state topic is empty")
 	}

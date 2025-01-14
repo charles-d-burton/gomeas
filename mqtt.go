@@ -103,7 +103,7 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 				case <-ctx.Done():
 					return nil
 				default:
-          println("warn:writing to a full channel")
+					println("warn:writing to a full channel")
 					//Ignores message if buffer full
 				}
 			}
@@ -163,7 +163,7 @@ func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
 			case msg := <-msgs:
 				println("info:received message to publish")
 
-				topic, err := msg.GetConfigTopic()
+				topic, err := msg.GetTopic()
 				if err != nil {
 					println(err.Error())
 					continue
