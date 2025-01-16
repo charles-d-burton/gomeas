@@ -50,20 +50,20 @@ func (mq *MQTT) ping(ctx context.Context) {
 func (mq *MQTT) handle(ctx context.Context, tcon func() error) {
 	go func() {
 		for {
-			if !mq.client.IsConnected() {
-				time.Sleep(time.Second)
-				if err := tcon(); err != nil {
-					println(err.Error())
-					continue
-				}
-				println("info:reconnected to mqtt broker")
-				continue
-			}
 			select {
 			case <-ctx.Done():
 				println("info:received done signal, exiting handler")
 				return
 			default:
+        if !mq.client.IsConnected() {
+          time.Sleep(time.Second)
+          if err := tcon(); err != nil {
+            println(err.Error())
+            continue
+          }
+          println("info:reconnected to mqtt broker")
+          continue
+        }
 				println("info:handling inbound request")
 				err := mq.client.HandleNext()
 				if err != nil {
