@@ -87,8 +87,8 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 					close(receiver)
 					return nil
 				default:
-					println("warn:writing to a full channel")
 					//Ignores message if buffer full
+					println("warn:writing to a full channel")
 				}
 			}
 			println("info:received message")
@@ -102,6 +102,7 @@ func (mq *MQTT) start(ctx context.Context, rwc io.ReadWriteCloser) (<-chan []byt
 	varConn.SetDefaultMQTT([]byte(mq.ClientID))
 	varConn.Username = []byte(mq.Username)
 	varConn.Password = []byte(mq.Password)
+  varConn.KeepAlive = 5
 	println("info:connecting with username: " + mq.Username)
 
 	tryconnect := func() error {
@@ -144,57 +145,38 @@ func NewMQTTConnection(ctx context.Context, rwc io.ReadWriteCloser, options *Opt
 }
 
 // Pubisher publishes messages to the MQTT broker on the  topic contained in the Message
-func (mq *MQTT) Publisher(ctx context.Context, msgs <-chan Message) error {
+func (mq *MQTT) Publish(msg Message) error {
 	if !mq.client.IsConnected() {
 		time.Sleep(time.Second)
-		return errors.New("client is not connected")
+    return errors.New("error:client is not connected")
 	}
 
-	go func() {
-		println("info:starting mqtt publisher")
-		pflags, err := mqtt.NewPublishFlags(mqtt.QoS0, false, false)
-		if err != nil {
-			panic(err)
-		}
-		for {
-			if !mq.client.IsConnected() {
-				println("error:client is disconnected, sleeping for 1 second and retrying")
-				time.Sleep(time.Second)
-				continue
-			}
+  println("info:starting mqtt publisher")
+  pflags, err := mqtt.NewPublishFlags(mqtt.QoS0, false, false)
+  if err != nil {
+    return err
+  }
+  println("info:received message to publish")
 
-			select {
-			case msg := <-msgs:
-				println("info:received message to publish")
+  topic, err := msg.GetTopic()
+  if err != nil {
+    return err
+  }
+  println("info:topic:" + string(topic))
 
-				topic, err := msg.GetTopic()
-				if err != nil {
-					println(err.Error())
-					continue
-				}
-				println("info:topic:" + string(topic))
-
-				vpub := mqtt.VariablesPublish{
-					TopicName:        topic,
-					PacketIdentifier: randInt16(),
-				}
-				data, err := msg.Marshal()
-				if err != nil {
-					println(err.Error())
-					continue
-				}
-				println("info:publishing message")
-				err = mq.client.PublishPayload(pflags, vpub, data)
-				if err != nil {
-					println("error:" + err.Error())
-				}
-				time.Sleep(time.Second)
-			case <-ctx.Done():
-				println("info:received done signal, exiting")
-				return
-			}
-		}
-	}()
+  vpub := mqtt.VariablesPublish{
+    TopicName:        topic,
+    PacketIdentifier: randInt16(),
+  }
+  data, err := msg.Marshal()
+  if err != nil {
+    return err
+  }
+  println("info:publishing message")
+  err = mq.client.PublishPayload(pflags, vpub, data)
+  if err != nil {
+    return err
+  }
 	return nil
 }
 
